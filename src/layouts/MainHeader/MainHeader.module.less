@@ -1,0 +1,50 @@
+.titlebar {
+	width: 100%;
+	height: 35px;
+	background: #329ea3;
+	display: flex;
+	align-items: center;
+	.logoBox {
+		height: 35px;
+		display: flex;
+		align-items: center;
+		color: aliceblue;
+		font-size: 13px;
+		padding-left: 10px;
+		img {
+			width: 20px;
+			height: 20px;
+		}
+		.logoTxt {
+			height: 30px;
+			line-height: 30px;
+			margin-left: 5px;
+		}
+	}
+	.menuBox {
+		flex: 1;
+		height: 35px;
+		-webkit-app-region: drag;
+	}
+	.operateWindow {
+		height: 35px;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		.titlebarButton {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 30px;
+			height: 30px;
+			cursor: pointer;
+			img {
+				width: 20px;
+				height: 20px;
+			}
+			&:hover {
+				background-color: #329ea3;
+			}
+		}
+	}
+}

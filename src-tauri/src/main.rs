@@ -11,7 +11,11 @@ use tauri::{
 
 mod commands;
 
-use commands::ffmpeg::{convert_video_to_audio, convert_video_to_other_format, query_video_info};
+use commands::audio::{convert_audio_to_other_format, query_audio_info};
+use commands::video::{
+    convert_video_to_audio, convert_video_to_other_format, query_video_info,
+    remove_audio_from_video,
+};
 use commands::window::show_main_window;
 
 #[command]
@@ -62,6 +66,9 @@ fn main() {
             query_video_info,
             hello_test,
             show_main_window,
+            query_audio_info,
+            convert_audio_to_other_format,
+            remove_audio_from_video
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

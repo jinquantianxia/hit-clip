@@ -1,16 +1,17 @@
 import React, { useState, useMemo } from "react";
-import { Spin, message, Button, Modal } from "antd";
+import { Spin, message, Button } from "antd";
 import {
 	DeleteOutlined,
 	PlusSquareOutlined,
 	EditOutlined,
 	SyncOutlined,
 } from "@ant-design/icons";
-import styles from "./VideoTransform.module.less";
+import styles from "./VideoMute.module.less";
 import { selectFiles, selectDir } from "@src/utils/file";
 import {
 	queryVideosInfo,
 	convertVideoToOtherVideoType,
+	removeAudioFromVideo,
 } from "@src/backend_calls/video";
 import { VideoInfoObject } from "@src/types/video";
 import VideoItemOperator from "@src/components/VideoItemOperator/VideoItemOperator";
@@ -18,14 +19,10 @@ import { filenameWithSuffix } from "@src/utils/file";
 import { convertResolutionToScale } from "@src/utils/video";
 import { FileTypes } from "@src/types/common";
 import CommonBlankTip from "@src/components/CommonBlankTip/CommonBlankTip";
-import VideoResolutionCustom from "@src/components/VideoResolutionCustom/VideoResolutionCustom";
 
-export default function VideoTransform() {
-	const [isModalVisible, setIsModalVisible] = useState(false);
+export default function VideoMute() {
 	const [spinning, setSpinning] = useState(false);
 	const [filesInfo, setFileInfo] = useState<VideoInfoObject[]>([]);
-	const [currentConfigFileObject, setCurrentConfigFileObject] =
-		useState<VideoInfoObject>();
 	const [outputDir, setOutputDir] = useState("");
 	const showDeleteSelectedBtn = useMemo(() => {
 		const choosedArr = filesInfo.filter((file) => file.choosed);
@@ -82,14 +79,9 @@ export default function VideoTransform() {
 		const output_file_path = `${outputDir}\\${filenameWithSuffix(
 			fileInfo.filePath,
 			false
-		)}.${fileInfo.targetFormat?.toLocaleLowerCase()}`;
-		const scaleStr = convertResolutionToScale(fileInfo.resolution);
+		)}_mute.${fileInfo.targetFormat?.toLocaleLowerCase()}`;
 		console.log("output_file_path:", output_file_path);
-		await convertVideoToOtherVideoType(
-			fileInfo.filePath,
-			output_file_path,
-			scaleStr
-		);
+		await removeAudioFromVideo(fileInfo.filePath, output_file_path);
 		if (singleMode) {
 			setSpinning(false);
 			message.success("转换成功！");
@@ -140,30 +132,6 @@ export default function VideoTransform() {
 		unchoosedList.forEach((item) => (item.choosed = false));
 		setFileInfo(unchoosedList);
 	};
-	const handleChangeTargetResolution = (fileInfo: VideoInfoObject) => {
-		setCurrentConfigFileObject(fileInfo);
-		setIsModalVisible(true);
-	};
-
-	const handleModalOk = (resolution: string) => {
-		const fileList = filesInfo.slice();
-		for (let file of fileList) {
-			if (file.filePath === currentConfigFileObject!.filePath) {
-				if (resolution === "0") {
-					file.resolution = file.originResolution;
-				} else {
-					file.resolution = resolution;
-				}
-				break;
-			}
-		}
-		console.log("fileList:", fileList);
-		setFileInfo(fileList);
-		setIsModalVisible(false);
-	};
-	const handleModalCancel = () => {
-		setIsModalVisible(false);
-	};
 	return (
 		<Spin spinning={spinning}>
 			<div className={styles.box}>
@@ -195,13 +163,11 @@ export default function VideoTransform() {
 						filesInfo.map((item) => {
 							return (
 								<VideoItemOperator
-									canModifyResolution={true}
 									fileInfo={item}
 									onHandleTargetFormatChange={handleVideoTargetFormatChange}
 									onHandleTransformClick={handleVideoTransformClick}
 									onHandleChoosed={handleChoosedVideo}
 									onHandleDelete={handleDeleteSingleVideo}
-									onHandleChangeTargetResolution={handleChangeTargetResolution}
 								/>
 							);
 						})
@@ -230,11 +196,6 @@ export default function VideoTransform() {
 					</div>
 				</div>
 			</div>
-			<VideoResolutionCustom
-				isModalVisible={isModalVisible}
-				onHandleModalOk={handleModalOk}
-				onHandleModalCancel={handleModalCancel}
-			/>
 		</Spin>
 	);
 }

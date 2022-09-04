@@ -1,23 +1,52 @@
 import { open } from "@tauri-apps/api/dialog";
+import { FileTypes } from "@src/types/common";
+import { videoTypeArray, audioTypeArray } from "@src/constants/common";
 
-export async function selectFile() {
+export async function selectFiles(type: FileTypes) {
+	let extensions: string[] = [];
+	switch (type) {
+		case FileTypes.AUDIO:
+			extensions = audioTypeArray;
+			break;
+		case FileTypes.VIDEO:
+			extensions = videoTypeArray;
+			break;
+		default:
+			break;
+	}
 	const selected = await open({
-		multiple: false,
+		title:
+			type === FileTypes.AUDIO
+				? "选择音频文件(可多选)"
+				: "选择视频文件(可多选)",
+		multiple: true,
 		filters: [
 			{
 				name: "choose media file",
-				extensions: ["mp4", "mp3", "avi", "3gp", "mpg", "mov", "vob", "webm"],
+				extensions,
 			},
 		],
 	});
-	return selected;
-	// if (Array.isArray(selected)) {
-	// 	// user selected multiple files
-	// } else if (selected === null) {
-	// 	// user cancelled the selection
-	// } else {
-	// 	// user selected a single file
-	// }
+	if (Array.isArray(selected)) {
+		// user selected multiple files
+		return selected;
+	} else if (selected === null) {
+		// user cancelled the selection
+		return [];
+	} else {
+		// user selected a single file
+		return [selected];
+	}
+}
+
+export async function selectDir() {
+	const selected = await open({
+		title: "选择目标文件夹",
+		directory: true,
+		multiple: false,
+	});
+
+	return selected ? (selected as string) : null;
 }
 
 export function filenameWithSuffix(
@@ -26,7 +55,7 @@ export function filenameWithSuffix(
 ): string {
 	const arr = filePath.split("\\");
 	const str = arr[arr.length - 1];
-	return withSuffix ? str : str.split(".")[1];
+	return withSuffix ? str : str.split(".")[0];
 }
 
 export function fileSuffix(filePath: string) {
@@ -34,7 +63,7 @@ export function fileSuffix(filePath: string) {
 	return arr[arr.length - 1];
 }
 
-export function fileSizeToUnit(fileSize: number, fileunit: string) {
+export function fileSizeToUnit(fileSize = 0, fileunit: string) {
 	let output = "";
 	switch (fileunit) {
 		case "KB":
@@ -44,6 +73,7 @@ export function fileSizeToUnit(fileSize: number, fileunit: string) {
 			output = `${(fileSize / (1024 * 1024)).toFixed(2)} MB`;
 			break;
 		default:
+			output = "0MB";
 			break;
 	}
 	return output;

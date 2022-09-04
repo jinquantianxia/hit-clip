@@ -15,13 +15,13 @@ pub fn query_video_info(input: &str) -> String {
     format!("file_size: {} \r\n {}", file_metadata.len(), output.stderr)
 }
 
-// ffmpeg -i input.mov output.mp4
+// ffmpeg -i input.avi -vf scale=320:240 output.avi
 #[command]
-pub fn convert_video_to_other_format(input: &str, output: &str) -> String {
+pub fn convert_video_to_other_format(input: &str, output: &str, scale: &str) -> String {
     println!("starting to convert...");
     let cmd = Command::new_sidecar("ffmpeg").unwrap();
     let output_obj = cmd
-        .args(["-i", input, output])
+        .args(["-i", input, "-vf", scale, output])
         .output()
         .expect("Failed to spawn sidecar");
     println!("convert successfully.");
@@ -35,6 +35,19 @@ pub fn convert_video_to_audio(input: &str, output: &str) -> String {
     let cmd = Command::new_sidecar("ffmpeg").unwrap();
     let output_obj = cmd
         .args(["-i", input, "-vn", output])
+        .output()
+        .expect("Failed to spawn sidecar");
+    println!("convert successfully.");
+    format!("output: {}", output_obj.stderr)
+}
+
+// ffmpeg -i input.mp4 -an mute-output.mp4
+#[command]
+pub fn remove_audio_from_video(input: &str, output: &str) -> String {
+    println!("starting to convert...");
+    let cmd = Command::new_sidecar("ffmpeg").unwrap();
+    let output_obj = cmd
+        .args(["-i", input, "-an", output])
         .output()
         .expect("Failed to spawn sidecar");
     println!("convert successfully.");

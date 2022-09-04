@@ -51,15 +51,6 @@ function App() {
 	return (
 		<div className={styles.box}>
 			<Layout />
-			{/* <h1 onClick={handleClick}> Hello Tauri!</h1>
-			<button onClick={handleBackend}>call backend</button>
-			<button onClick={handleOpenNewWindow}>open new window</button>
-			<button onClick={handleConvertVideoToOtherFormat}>
-				Convert video to other format
-			</button>
-			<button onClick={handleConvertVideoToAudio}>
-				Convert video to audio
-			</button> */}
 		</div>
 	);
 }
