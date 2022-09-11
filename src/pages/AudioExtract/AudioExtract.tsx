@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import styles from "./AudioExtract.module.less";
 import { selectFiles, selectDir } from "@src/utils/file";
-import { queryVideosInfo, convertVideoToAudio } from "@src/backend_calls/video";
+import { queryVideosInfo, convertVideoToAudio } from "@src/apis/video";
 import { VideoInfoObject } from "@src/types/video";
 import VideoItemOperator from "@src/components/VideoItemOperator/VideoItemOperator";
 import { filenameWithSuffix } from "@src/utils/file";
@@ -30,10 +30,13 @@ export default function VideoTransform() {
 		const videoList = filesInfo.slice();
 		const pathList = filesInfo.map((item) => item.filePath);
 		const filePaths = (await selectFiles(FileTypes.VIDEO)) as string[];
-		const files = await queryVideosInfo(filePaths, true);
-		for (const file of files) {
-			if (!pathList.includes(file.filePath)) videoList.push(file);
+		if (filePaths.length) {
+			const files = await queryVideosInfo(filePaths, true);
+			for (const file of files) {
+				if (!pathList.includes(file.filePath)) videoList.push(file);
+			}
 		}
+
 		setSpinning(false);
 		setFileInfo(videoList);
 	};

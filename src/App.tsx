@@ -5,6 +5,7 @@ import { emit } from "@tauri-apps/api/event";
 import { WebviewWindow } from "@tauri-apps/api/window";
 import { Route, HashRouter } from "react-router-dom";
 import Layout from "./layouts/Index";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
 	useEffect(() => {
@@ -50,7 +51,9 @@ function App() {
 	};
 	return (
 		<div className={styles.box}>
-			<Layout />
+			<BrowserRouter>
+				<Layout />
+			</BrowserRouter>
 		</div>
 	);
 }

@@ -8,10 +8,7 @@ import {
 } from "@ant-design/icons";
 import styles from "./AudioTransform.module.less";
 import { selectFiles, selectDir } from "@src/utils/file";
-import {
-	queryAudiosInfo,
-	convertAudioToOtherAudioType,
-} from "@src/backend_calls/audio";
+import { queryAudiosInfo, convertAudioToOtherAudioType } from "@src/apis/audio";
 import { AudioInfoObject } from "@src/types/audio";
 import AudioItemOperator from "@src/components/AudioItemOperator/AudioItemOperator";
 import { filenameWithSuffix } from "@src/utils/file";
@@ -32,10 +29,13 @@ export default function AudioTransform() {
 		const AudioList = filesInfo.slice();
 		const pathList = filesInfo.map((item) => item.filePath);
 		const filePaths = (await selectFiles(FileTypes.AUDIO)) as string[];
-		const files = await queryAudiosInfo(filePaths);
-		for (const file of files) {
-			if (!pathList.includes(file.filePath)) AudioList.push(file);
+		if (filePaths.length) {
+			const files = await queryAudiosInfo(filePaths);
+			for (const file of files) {
+				if (!pathList.includes(file.filePath)) AudioList.push(file);
+			}
 		}
+
 		setSpinning(false);
 		setFileInfo(AudioList);
 	};

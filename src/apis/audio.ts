@@ -1,19 +1,17 @@
 import { invoke } from "@tauri-apps/api";
-import { BACKEND_CALLS } from "./calls";
+import { REQ_PATHS } from "./req_path";
 import { AudioInfoObject } from "@src/types/audio";
-import {
-	filenameWithSuffix,
-	fileSuffix,
-	fileSizeToUnit,
-} from "@src/utils/file";
+import { filenameWithSuffix, fileSuffix } from "@src/utils/file";
+import { fetchPost } from "@src/utils/request";
 
 export async function queryAudiosInfo(inputFilesPath: string[]) {
 	return Promise.all(
 		inputFilesPath.map(async (filePath, index) => {
-			const ret = (await invoke(BACKEND_CALLS.QUERY_AUDIO_INFO, {
-				input: filePath,
-			})) as string;
-			const infoArray = ret.split("\r\n");
+			const ret = await fetchPost(REQ_PATHS.QUERY_AUDIO_INFO, {
+				local_path: filePath,
+			});
+			const rawStr = await ret.text();
+			const infoArray = rawStr.split("\r\n");
 			const retObj: AudioInfoObject = {
 				id: index,
 				name: filenameWithSuffix(filePath),
@@ -46,10 +44,11 @@ export async function convertAudioToOtherAudioType(
 	input_file_path: string,
 	output_file_path: string
 ) {
-	const ret = (await invoke(BACKEND_CALLS.CONVERT_AUDIO_TO_OTHER_FORMAT, {
+	const ret = await fetchPost(REQ_PATHS.CONVERT_AUDIO_TO_OTHER_FORMAT, {
 		input: input_file_path,
 		output: output_file_path,
-	})) as string;
+		extra: "",
+	});
 	console.log("convert_Audio to_other_format output: " + ret);
 	return ret;
 }

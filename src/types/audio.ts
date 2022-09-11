@@ -9,3 +9,8 @@ export interface AudioInfoObject {
 	choosed: boolean;
 	targetFormat?: string;
 }
+
+export interface AudioMaterialItemInfo {
+	title: string;
+	url: string;
+}

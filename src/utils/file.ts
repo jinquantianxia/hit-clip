@@ -2,7 +2,7 @@ import { open } from "@tauri-apps/api/dialog";
 import { FileTypes } from "@src/types/common";
 import { videoTypeArray, audioTypeArray } from "@src/constants/common";
 
-export async function selectFiles(type: FileTypes) {
+export async function selectFiles(type: FileTypes, multiple = true) {
 	let extensions: string[] = [];
 	switch (type) {
 		case FileTypes.AUDIO:
@@ -19,7 +19,7 @@ export async function selectFiles(type: FileTypes) {
 			type === FileTypes.AUDIO
 				? "选择音频文件(可多选)"
 				: "选择视频文件(可多选)",
-		multiple: true,
+		multiple,
 		filters: [
 			{
 				name: "choose media file",
@@ -77,4 +77,18 @@ export function fileSizeToUnit(fileSize = 0, fileunit: string) {
 			break;
 	}
 	return output;
+}
+
+export async function downloadFileUrl(url: string, fileName: string) {
+	const res = await fetch(url);
+	const blob = await res.blob();
+	const a = document.createElement("a");
+	document.body.appendChild(a);
+	a.style.display = "none";
+	const url_1 = window.URL.createObjectURL(blob);
+	a.href = url_1;
+	a.download = fileName;
+	a.click();
+	document.body.removeChild(a);
+	window.URL.revokeObjectURL(url_1);
 }

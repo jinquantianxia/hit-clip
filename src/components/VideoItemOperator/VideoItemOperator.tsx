@@ -83,10 +83,18 @@ export default function VideoItemOperator({
 							<select onChange={(e) => handleChange(e.target.value)}>
 								{isToAudio
 									? audioTypeArray.map((video) => {
-											return <option value={video}>{video}</option>;
+											return (
+												<option key={video} value={video}>
+													{video}
+												</option>
+											);
 									  })
 									: videoTypeArray.map((video) => {
-											return <option value={video}>{video}</option>;
+											return (
+												<option key={video} value={video}>
+													{video}
+												</option>
+											);
 									  })}
 							</select>
 						</div>

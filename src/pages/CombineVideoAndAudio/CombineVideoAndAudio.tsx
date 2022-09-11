@@ -6,59 +6,55 @@ import {
 	EditOutlined,
 	SyncOutlined,
 } from "@ant-design/icons";
-import styles from "./VideoMute.module.less";
+import styles from "./CombineVideoAndAudio.module.less";
 import { selectFiles, selectDir } from "@src/utils/file";
-import {
-	queryVideosInfo,
-	convertVideoToOtherVideoType,
-	removeAudioFromVideo,
-} from "@src/apis/video";
-import { VideoInfoObject } from "@src/types/video";
-import VideoItemOperator from "@src/components/VideoItemOperator/VideoItemOperator";
+import { combineVideoAndAudio } from "@src/apis/video";
+import { VideoAndAudioCombineObject } from "@src/types/common";
+import VideoAndAudioCombineItem from "@src/components/VideoAndAudioCombineItem/VideoAndAudioCombineItem";
 import { filenameWithSuffix } from "@src/utils/file";
-import { convertResolutionToScale } from "@src/utils/video";
 import { FileTypes } from "@src/types/common";
 import CommonBlankTip from "@src/components/CommonBlankTip/CommonBlankTip";
+import { VideoInfoObject } from "@src/types/video";
+import { AudioInfoObject } from "@src/types/audio";
+import { getRandomString } from "@src/utils/common";
 
-export default function VideoMute() {
+export default function AudioTransform() {
 	const [spinning, setSpinning] = useState(false);
-	const [filesInfo, setFileInfo] = useState<VideoInfoObject[]>([]);
+	const [filesInfo, setFilesInfo] = useState<VideoAndAudioCombineObject[]>([
+		{
+			key: getRandomString(),
+			choosed: false,
+		},
+	]);
 	const [outputDir, setOutputDir] = useState("");
 	const showDeleteSelectedBtn = useMemo(() => {
 		const choosedArr = filesInfo.filter((file) => file.choosed);
 		if (choosedArr.length) return true;
 		return false;
 	}, [filesInfo]);
-	const handleChooseFile = async () => {
-		setSpinning(true);
-		const videoList = filesInfo.slice();
-		const pathList = filesInfo.map((item) => item.filePath);
-		const filePaths = (await selectFiles(FileTypes.VIDEO)) as string[];
-		if (filePaths.length) {
-			const files = await queryVideosInfo(filePaths);
-			for (const file of files) {
-				if (!pathList.includes(file.filePath)) videoList.push(file);
-			}
-		}
-
-		setSpinning(false);
-		setFileInfo(videoList);
+	const handleAddItem = () => {
+		const arr = filesInfo.slice();
+		const item = {
+			key: getRandomString(),
+			choosed: false,
+		};
+		arr.push(item);
+		setFilesInfo(arr);
 	};
 
-	const handleVideoTargetFormatChange = (
-		fileInfo: VideoInfoObject,
+	const handleChooseTargetFormat = (
+		fileInfo: VideoAndAudioCombineObject,
 		format: string
 	) => {
 		const fileList = filesInfo.slice();
-		const length = fileList.length;
 		for (let file of fileList) {
-			if (file.filePath === fileInfo.filePath) {
+			if (file.key === fileInfo.key) {
 				file.targetFormat = format;
 				break;
 			}
 		}
 		console.log("fileList:", fileList);
-		setFileInfo(fileList);
+		setFilesInfo(fileList);
 	};
 
 	const handleChangeTargetDir = async () => {
@@ -69,8 +65,8 @@ export default function VideoMute() {
 		}
 	};
 
-	const handleVideoTransformClick = async (
-		fileInfo: VideoInfoObject,
+	const handleClickTransform = async (
+		fileInfo: VideoAndAudioCombineObject,
 		singleMode = true
 	) => {
 		console.log("fileInfo:", fileInfo);
@@ -78,13 +74,28 @@ export default function VideoMute() {
 			message.info("您还没有设置输出文件夹！");
 			return;
 		}
+		if (!fileInfo.video) {
+			message.info("您还没有选择视频文件！");
+			return;
+		}
+		if (!fileInfo.audio) {
+			message.info("您还没有选择音频文件！");
+			return;
+		}
 		if (singleMode) setSpinning(true);
 		const output_file_path = `${outputDir}\\${filenameWithSuffix(
-			fileInfo.filePath,
+			fileInfo.video?.filePath!,
 			false
-		)}_mute.${fileInfo.targetFormat?.toLocaleLowerCase()}`;
+		)}_combine_${filenameWithSuffix(
+			fileInfo.audio?.filePath!,
+			false
+		)}.${fileInfo.targetFormat?.toLocaleLowerCase()}`;
 		console.log("output_file_path:", output_file_path);
-		await removeAudioFromVideo(fileInfo.filePath, output_file_path);
+		await combineVideoAndAudio(
+			fileInfo.video?.filePath!,
+			fileInfo.audio?.filePath!,
+			output_file_path
+		);
 		if (singleMode) {
 			setSpinning(false);
 			message.success("转换成功！");
@@ -96,44 +107,77 @@ export default function VideoMute() {
 			message.info("您还没有设置输出文件夹！");
 			return;
 		}
+		for (const item of filesInfo) {
+			if (!item.video || !item.audio) {
+				message.info("您还有未设置的音频或视频，无法一键转换");
+				return;
+			}
+		}
 		setSpinning(true);
 		await Promise.all(
 			filesInfo.map(async (fileInfo) => {
-				await handleVideoTransformClick(fileInfo, false);
+				await handleClickTransform(fileInfo, false);
 			})
 		);
 		setSpinning(false);
 		message.success("一键转换成功！");
 	};
 
-	const handleChoosedVideo = (fileInfo: VideoInfoObject) => {
+	const handleChoosedItem = (fileInfo: VideoAndAudioCombineObject) => {
 		const fileList = filesInfo.slice();
 		const len = fileList.length;
 		for (let i = 0; i < len; i++) {
-			if (fileList[i].filePath === fileInfo.filePath) {
+			if (fileList[i].key === fileInfo.key) {
 				fileList[i].choosed = !fileList[i].choosed;
 				break;
 			}
 		}
-		setFileInfo(fileList);
+		setFilesInfo(fileList);
 	};
 
-	const handleDeleteSingleVideo = (fileInfo: VideoInfoObject) => {
+	const handleDeleteSingleItem = (fileInfo: VideoAndAudioCombineObject) => {
 		const fileList = filesInfo.slice();
 		const len = fileList.length;
 		for (let i = 0; i < len; i++) {
-			if (fileList[i].filePath === fileInfo.filePath) {
+			if (fileList[i].key === fileInfo.key) {
 				fileList.splice(i, 1);
 				break;
 			}
 		}
-		setFileInfo(fileList);
+		setFilesInfo(fileList);
 	};
 
-	const handleDeleteSelectedVideos = () => {
+	const handleDeleteSelectedAudios = () => {
 		const unchoosedList = filesInfo.slice().filter((file) => !file.choosed);
 		unchoosedList.forEach((item) => (item.choosed = false));
-		setFileInfo(unchoosedList);
+		setFilesInfo(unchoosedList);
+	};
+
+	const handleChooseVideo = (
+		objectInfo: VideoAndAudioCombineObject,
+		videoInfo: VideoInfoObject
+	) => {
+		const arr = filesInfo.slice();
+		for (let item of arr) {
+			if (item.key === objectInfo.key) {
+				item.video = videoInfo;
+				break;
+			}
+		}
+		setFilesInfo(arr);
+	};
+	const handleChooseAudio = (
+		objectInfo: VideoAndAudioCombineObject,
+		audioInfo: AudioInfoObject
+	) => {
+		const arr = filesInfo.slice();
+		for (let item of arr) {
+			if (item.key === objectInfo.key) {
+				item.audio = audioInfo;
+				break;
+			}
+		}
+		setFilesInfo(arr);
 	};
 	return (
 		<Spin spinning={spinning}>
@@ -143,9 +187,9 @@ export default function VideoMute() {
 						<Button
 							type="primary"
 							icon={<PlusSquareOutlined />}
-							onClick={handleChooseFile}
+							onClick={handleAddItem}
 						>
-							添加视频文件
+							添加音视频混合
 						</Button>
 					</div>
 					{showDeleteSelectedBtn && (
@@ -154,24 +198,33 @@ export default function VideoMute() {
 								type="primary"
 								icon={<DeleteOutlined />}
 								danger
-								onClick={handleDeleteSelectedVideos}
+								onClick={handleDeleteSelectedAudios}
 							>
 								删除选中
 							</Button>
 						</div>
 					)}
 				</div>
-				<div className={styles.videoList}>
+				<div className={styles.audioList}>
 					{filesInfo.length > 0 ? (
 						filesInfo.map((item) => {
 							return (
-								<VideoItemOperator
-									fileInfo={item}
-									onHandleTargetFormatChange={handleVideoTargetFormatChange}
-									onHandleTransformClick={handleVideoTransformClick}
-									onHandleChoosed={handleChoosedVideo}
-									onHandleDelete={handleDeleteSingleVideo}
+								<VideoAndAudioCombineItem
+									objectInfo={item}
+									onHandleChooseVideo={handleChooseVideo}
+									onHandleChooseAudio={handleChooseAudio}
+									onHandleChooseTargetFormat={handleChooseTargetFormat}
+									onHandleChoosed={handleChoosedItem}
+									onHandleClickTransform={handleClickTransform}
+									onHandleDelete={handleDeleteSingleItem}
 								/>
+								// <AudioItemOperator
+								// 	fileInfo={item}
+								// 	onHandleTargetFormatChange={handleAudioTargetFormatChange}
+								// 	onHandleTransformClick={handleAudioTransformClick}
+								// 	onHandleChoosed={handleChoosedAudio}
+								// 	onHandleDelete={handleDeleteSingleAudio}
+								// />
 							);
 						})
 					) : (

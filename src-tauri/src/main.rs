@@ -4,19 +4,23 @@
 )]
 
 use std::env;
+use tauri::api::process::{Command, CommandChild, CommandEvent};
 use tauri::{
-    command, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
+    command, CustomMenuItem, Manager, RunEvent, SystemTray, SystemTrayEvent, SystemTrayMenu,
     SystemTrayMenuItem,
 };
 
 mod commands;
 
-use commands::audio::{convert_audio_to_other_format, query_audio_info};
-use commands::video::{
-    convert_video_to_audio, convert_video_to_other_format, query_video_info,
-    remove_audio_from_video,
-};
+// use commands::audio::{convert_audio_to_other_format, query_audio_info};
+// use commands::video::{
+//     convert_video_to_audio, convert_video_to_other_format, query_video_info,
+//     remove_audio_from_video,
+// };
 use commands::window::show_main_window;
+
+#[derive(Default)]
+struct Backend(Option<CommandChild>);
 
 #[command]
 fn hello_test(word: String) -> String {
@@ -26,6 +30,7 @@ fn hello_test(word: String) -> String {
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
+    let mut backend = Backend::default();
     let quit = CustomMenuItem::new("quit".to_string(), "QUIT");
     let hide = CustomMenuItem::new("hide".to_string(), "HIDE");
     let tray_menu = SystemTrayMenu::new()
@@ -61,15 +66,32 @@ fn main() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            convert_video_to_other_format,
-            convert_video_to_audio,
-            query_video_info,
-            hello_test,
+            // convert_video_to_other_format,
+            // convert_video_to_audio,
+            // query_video_info,
+            // hello_test,
             show_main_window,
-            query_audio_info,
-            convert_audio_to_other_format,
-            remove_audio_from_video
+            // query_audio_info,
+            // convert_audio_to_other_format,
+            // remove_audio_from_video
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("Error building app")
+        .run(move |app_handle, event| match event {
+            RunEvent::Ready => {
+                // let (_, child) = Command::new_sidecar("actix-demo")
+                //     .expect("Failed to create `backend_server` binary command")
+                //     .spawn()
+                //     .expect("Failed to spawn backend sidecar");
+
+                // _ = backend.0.insert(child);
+            }
+            RunEvent::ExitRequested { api, .. } => {
+                // if let Some(child) = backend.0.take() {
+                //     child.kill().expect("Failed to shutdown backend.");
+                //     println!("Backend gracefully shutdown.")
+                // }
+            }
+            _ => {}
+        });
 }

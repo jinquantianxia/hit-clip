@@ -20,7 +20,8 @@
 			"shell": {
 				"sidecar": true,
 				"scope": [
-					{ "name": "ffmpeg_2022_08_18/ffmpeg", "args": true, "sidecar": true }
+					{ "name": "local_service/ffmpeg", "args": true, "sidecar": true },
+					{ "name": "local_service/actix-demo", "args": true, "sidecar": true }
 				]
 			},
 			"dialog": {
@@ -36,7 +37,7 @@
 			"deb": {
 				"depends": []
 			},
-			"externalBin": ["ffmpeg_2022_08_18/ffmpeg"],
+			"externalBin": ["local_service/ffmpeg", "local_service/actix-demo"],
 			"icon": [
 				"icons/32x32.png",
 				"icons/128x128.png",

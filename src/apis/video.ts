@@ -1,20 +1,22 @@
 import { invoke } from "@tauri-apps/api";
-import { BACKEND_CALLS } from "./calls";
+import { REQ_PATHS } from "./req_path";
 import { VideoInfoObject } from "@src/types/video";
 import {
 	filenameWithSuffix,
 	fileSuffix,
 	fileSizeToUnit,
 } from "@src/utils/file";
+import { fetchPost } from "@src/utils/request";
 
 export async function convertVideoToAudio(
 	input_file_path: string,
 	output_file_path: string
 ) {
-	const ret = (await invoke(BACKEND_CALLS.CONVERT_VIDEO_TO_AUDIO, {
+	const ret = await fetchPost(REQ_PATHS.CONVERT_VIDEO_TO_AUDIO, {
 		input: input_file_path,
 		output: output_file_path,
-	})) as string;
+		extra: "",
+	});
 	console.log("convert_video_to_audio output: " + ret);
 	return ret;
 }
@@ -24,11 +26,11 @@ export async function convertVideoToOtherVideoType(
 	output_file_path: string,
 	scale: string
 ) {
-	const ret = (await invoke(BACKEND_CALLS.CONVERT_VIDEO_TO_OTHER_FORMAT, {
+	const ret = await fetchPost(REQ_PATHS.CONVERT_VIDEO_TO_OTHER_FORMAT, {
 		input: input_file_path,
 		output: output_file_path,
-		scale,
-	})) as string;
+		extra: scale,
+	});
 	console.log("convert_video_to_other_format output: " + ret);
 	return ret;
 }
@@ -39,10 +41,11 @@ export async function queryVideosInfo(
 ) {
 	return Promise.all(
 		inputFilesPath.map(async (filePath, index) => {
-			const ret = (await invoke(BACKEND_CALLS.QUERY_VIDEO_INFO, {
-				input: filePath,
-			})) as string;
-			const infoArray = ret.split("\r\n");
+			const ret = await fetchPost(REQ_PATHS.QUERY_VIDEO_INFO, {
+				local_path: filePath,
+			});
+			const rawStr = await ret.text();
+			const infoArray = rawStr.split("\r\n");
 			const retObj: VideoInfoObject = {
 				id: index,
 				name: filenameWithSuffix(filePath),
@@ -80,10 +83,25 @@ export async function removeAudioFromVideo(
 	input_file_path: string,
 	output_file_path: string
 ) {
-	const ret = (await invoke(BACKEND_CALLS.REMOVE_AUDIO_FROM_VIDEO, {
+	const ret = await fetchPost(REQ_PATHS.REMOVE_AUDIO_FROM_VIDEO, {
 		input: input_file_path,
 		output: output_file_path,
-	})) as string;
+		extra: "",
+	});
 	console.log("removeAudioFromVideo output: " + ret);
+	return ret;
+}
+
+export async function combineVideoAndAudio(
+	video_path: string,
+	audio_path: string,
+	output_file_path: string
+) {
+	const ret = await fetchPost(REQ_PATHS.COMBINE_VIDEO_AND_AUDIO, {
+		input: video_path,
+		output: output_file_path,
+		extra: audio_path,
+	});
+	console.log("combineVideoAndAudio output: " + ret);
 	return ret;
 }

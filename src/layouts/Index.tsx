@@ -1,9 +1,10 @@
 import React from "react";
 import styles from "./index.module.less";
 import MainHeader from "./MainHeader/MainHeader";
-import Navigator from "./Navigator/Navigator";
-import MainContent from "./MainContent/MainContent";
-import { HashRouter } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+
+import KeepAlive from "react-activation";
+import { routers } from "@src/routers";
 
 export default function Layout() {
 	return (
@@ -11,16 +12,17 @@ export default function Layout() {
 			<div className={styles.header}>
 				<MainHeader />
 			</div>
-			<div className={styles.content}>
-				<HashRouter>
-					<div className={styles.naviBox}>
-						<Navigator />
-					</div>
-					<div className={styles.mainBox}>
-						<MainContent />
-					</div>
-				</HashRouter>
-			</div>
+			<Routes>
+				{routers.map((router) => {
+					return (
+						<Route
+							key={router.path}
+							path={router.path}
+							element={router.component}
+						/>
+					);
+				})}
+			</Routes>
 		</div>
 	);
 }

@@ -26,4 +26,4 @@ dist-ssr
 *.m4a
 *.mp3
 *.srt
-src-tauri/ffmpeg_2022_08_18/*
+src-tauri/local_service/*

@@ -8,10 +8,7 @@ import {
 } from "@ant-design/icons";
 import styles from "./VideoTransform.module.less";
 import { selectFiles, selectDir } from "@src/utils/file";
-import {
-	queryVideosInfo,
-	convertVideoToOtherVideoType,
-} from "@src/backend_calls/video";
+import { queryVideosInfo, convertVideoToOtherVideoType } from "@src/apis/video";
 import { VideoInfoObject } from "@src/types/video";
 import VideoItemOperator from "@src/components/VideoItemOperator/VideoItemOperator";
 import { filenameWithSuffix } from "@src/utils/file";
@@ -37,10 +34,13 @@ export default function VideoTransform() {
 		const videoList = filesInfo.slice();
 		const pathList = filesInfo.map((item) => item.filePath);
 		const filePaths = (await selectFiles(FileTypes.VIDEO)) as string[];
-		const files = await queryVideosInfo(filePaths);
-		for (const file of files) {
-			if (!pathList.includes(file.filePath)) videoList.push(file);
+		if (filePaths.length) {
+			const files = await queryVideosInfo(filePaths);
+			for (const file of files) {
+				if (!pathList.includes(file.filePath)) videoList.push(file);
+			}
 		}
+
 		setSpinning(false);
 		setFileInfo(videoList);
 	};
@@ -195,6 +195,7 @@ export default function VideoTransform() {
 						filesInfo.map((item) => {
 							return (
 								<VideoItemOperator
+									key={item.filePath}
 									canModifyResolution={true}
 									fileInfo={item}
 									onHandleTargetFormatChange={handleVideoTargetFormatChange}
