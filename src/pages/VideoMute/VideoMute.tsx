@@ -19,6 +19,7 @@ import { filenameWithSuffix } from "@src/utils/file";
 import { convertResolutionToScale } from "@src/utils/video";
 import { FileTypes } from "@src/types/common";
 import CommonBlankTip from "@src/components/CommonBlankTip/CommonBlankTip";
+import CommonBottom from "@src/components/CommonBottom/CommonBottom";
 
 export default function VideoMute() {
 	const [spinning, setSpinning] = useState(false);
@@ -61,11 +62,10 @@ export default function VideoMute() {
 		setFileInfo(fileList);
 	};
 
-	const handleChangeTargetDir = async () => {
-		const dir = await selectDir();
-		if (dir) {
-			console.log("dir:", dir);
-			setOutputDir(dir);
+	const handleChangeTargetDir = (path: string) => {
+		if (path) {
+			console.log("dir:", path);
+			setOutputDir(path);
 		}
 	};
 
@@ -178,26 +178,10 @@ export default function VideoMute() {
 						<CommonBlankTip />
 					)}
 				</div>
-				<div className={styles.bottomBox}>
-					<div className={styles.outPathTitle}>输出路径:</div>
-					<div className={styles.outPath}>{outputDir}</div>
-					<Button
-						type="primary"
-						icon={<EditOutlined />}
-						onClick={handleChangeTargetDir}
-					>
-						更改文件夹
-					</Button>
-					<div className={styles.transformBox}>
-						<Button
-							type="primary"
-							icon={<SyncOutlined />}
-							onClick={handleTransformOneClick}
-						>
-							一键转换
-						</Button>
-					</div>
-				</div>
+				<CommonBottom
+					onHandleChangeLocalPath={handleChangeTargetDir}
+					onHandleClickOneKeyTransform={handleTransformOneClick}
+				/>
 			</div>
 		</Spin>
 	);

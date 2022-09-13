@@ -58,9 +58,13 @@ export function filenameWithSuffix(
 	return withSuffix ? str : str.split(".")[0];
 }
 
-export function fileSuffix(filePath: string) {
+export function fileSuffix(filePath: string, withSuffix = true) {
 	const arr = filePath.split(".");
-	return arr[arr.length - 1];
+	if (withSuffix) return arr[arr.length - 1];
+	const dir = arr[0];
+	let dirArr = dir.split("\\");
+	dirArr.pop();
+	return dirArr.join("\\");
 }
 
 export function fileSizeToUnit(fileSize = 0, fileunit: string) {

@@ -17,6 +17,7 @@ mod commands;
 //     convert_video_to_audio, convert_video_to_other_format, query_video_info,
 //     remove_audio_from_video,
 // };
+use commands::common::show_explorer;
 use commands::window::show_main_window;
 
 #[derive(Default)]
@@ -65,16 +66,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![
-            // convert_video_to_other_format,
-            // convert_video_to_audio,
-            // query_video_info,
-            // hello_test,
-            show_main_window,
-            // query_audio_info,
-            // convert_audio_to_other_format,
-            // remove_audio_from_video
-        ])
+        .invoke_handler(tauri::generate_handler![show_main_window, show_explorer])
         .build(tauri::generate_context!())
         .expect("Error building app")
         .run(move |app_handle, event| match event {

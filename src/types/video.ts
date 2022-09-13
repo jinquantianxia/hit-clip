@@ -8,5 +8,6 @@ export interface VideoInfoObject {
 	size: number;
 	duration: string;
 	choosed: boolean;
+	successed: boolean;
 	targetFormat?: string;
 }

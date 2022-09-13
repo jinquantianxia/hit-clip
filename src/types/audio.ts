@@ -7,6 +7,7 @@ export interface AudioInfoObject {
 	size: number;
 	duration: string;
 	choosed: boolean;
+	successed: boolean;
 	targetFormat?: string;
 }
 

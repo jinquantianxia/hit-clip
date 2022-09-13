@@ -73,11 +73,11 @@
 			{
 				"label": "main",
 				"fullscreen": false,
-				"height": 700,
+				"height": 780,
 				"resizable": false,
 				"title": "",
 				"decorations": false,
-				"width": 960
+				"width": 1080
 			}
 		]
 	}

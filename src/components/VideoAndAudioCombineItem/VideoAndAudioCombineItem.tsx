@@ -12,7 +12,7 @@ import {
 import transIcon from "@src/assets/transform_to.svg";
 import { Button, Modal, Select, Spin } from "antd";
 import {
-	PlusSquareOutlined,
+	FolderOpenOutlined,
 	EditOutlined,
 	SyncOutlined,
 } from "@ant-design/icons";
@@ -24,6 +24,7 @@ import { selectFiles, selectDir } from "@src/utils/file";
 import { FileTypes } from "@src/types/common";
 import { queryVideosInfo, convertVideoToOtherVideoType } from "@src/apis/video";
 import { queryAudiosInfo } from "@src/apis/audio";
+import { showFileExplorer } from "@src/backend_calls/common";
 const { Option } = Select;
 
 interface Props {
@@ -130,14 +131,26 @@ export default function VideoAndAudioCombineItem({
 					</Select>
 				</div>
 			</div>
-			<Button
-				type="default"
-				icon={<SyncOutlined />}
-				size="middle"
-				onClick={() => onHandleClickTransform(objectInfo)}
-			>
-				转换
-			</Button>
+			{objectInfo.successed ? (
+				<Button
+					type="primary"
+					shape="circle"
+					icon={<FolderOpenOutlined />}
+					size="middle"
+					onClick={() =>
+						showFileExplorer(fileSuffix(objectInfo?.targetPath!, false))
+					}
+				></Button>
+			) : (
+				<Button
+					type="default"
+					icon={<SyncOutlined />}
+					size="middle"
+					onClick={() => onHandleClickTransform(objectInfo)}
+				>
+					转换
+				</Button>
+			)}
 			<div
 				className={styles.deleteBox}
 				onClick={() => onHandleDelete(objectInfo)}

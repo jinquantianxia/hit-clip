@@ -21,6 +21,7 @@ export async function queryAudiosInfo(inputFilesPath: string[]) {
 				size: 0,
 				duration: "00:00:00",
 				targetFormat: "MP3",
+				successed: false,
 				choosed: false,
 			};
 			for (let line of infoArray) {

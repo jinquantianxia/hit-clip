@@ -12,12 +12,13 @@ import {
 import transIcon from "@src/assets/transform_to.svg";
 import { Button, Modal } from "antd";
 import {
-	PlusSquareOutlined,
+	FolderOpenOutlined,
 	EditOutlined,
 	SyncOutlined,
 } from "@ant-design/icons";
 import { VideoInfoObject } from "@src/types/video";
 import { videoTypeArray, audioTypeArray } from "@src/constants/common";
+import { showFileExplorer } from "@src/backend_calls/common";
 
 interface Props {
 	fileInfo: VideoInfoObject;
@@ -127,14 +128,26 @@ export default function VideoItemOperator({
 						</Button>
 					</div> */}
 					<div className={styles.setBox}>
-						<Button
-							type="default"
-							icon={<SyncOutlined />}
-							size="middle"
-							onClick={() => onHandleTransformClick(fileInfo)}
-						>
-							转换
-						</Button>
+						{fileInfo.successed ? (
+							<Button
+								type="primary"
+								shape="circle"
+								icon={<FolderOpenOutlined />}
+								size="middle"
+								onClick={() =>
+									showFileExplorer(fileSuffix(fileInfo.filePath, false))
+								}
+							></Button>
+						) : (
+							<Button
+								type="default"
+								icon={<SyncOutlined />}
+								size="middle"
+								onClick={() => onHandleTransformClick(fileInfo)}
+							>
+								转换
+							</Button>
+						)}
 					</div>
 				</div>
 			</div>

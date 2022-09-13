@@ -57,6 +57,7 @@ export async function queryVideosInfo(
 				duration: "00:00:00",
 				targetFormat: isToAudio ? "MP3" : "MP4",
 				choosed: false,
+				successed: false,
 			};
 			for (let line of infoArray) {
 				if (line.includes("file_size")) {
@@ -103,5 +104,37 @@ export async function combineVideoAndAudio(
 		extra: audio_path,
 	});
 	console.log("combineVideoAndAudio output: " + ret);
+	return ret;
+}
+
+// 裁剪视频时间段
+export async function trimVideo(
+	input_file_path: string,
+	output_file_path: string,
+	startTime: string,
+	endTime: string
+) {
+	const ret = await fetchPost(REQ_PATHS.TRIM_VIDEO, {
+		input: input_file_path,
+		output: output_file_path,
+		start: startTime,
+		end: endTime,
+	});
+	console.log("trimVideo output: " + ret);
+	return ret;
+}
+
+// 裁剪视频区域
+export async function cropVideo(
+	input_file_path: string,
+	output_file_path: string,
+	crop: string
+) {
+	const ret = await fetchPost(REQ_PATHS.CROP_VIDEO, {
+		input: input_file_path,
+		output: output_file_path,
+		extra: crop,
+	});
+	console.log("trimVideo output: " + ret);
 	return ret;
 }

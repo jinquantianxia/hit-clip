@@ -11,5 +11,7 @@ export interface VideoAndAudioCombineObject {
 	choosed: boolean;
 	audio?: AudioInfoObject;
 	video?: VideoInfoObject;
-	targetFormat?: string;
+	successed: boolean;
+	targetPath?: string;
+	targetFormat: string;
 }

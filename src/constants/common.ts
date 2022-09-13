@@ -12,7 +12,7 @@ export const audioTypeArray = [
 	"MP3",
 	"FLAC",
 	"WAV",
-	"W4A",
+	"M4A",
 	"WMA",
 	"AAC",
 	"AC3",
@@ -20,8 +20,8 @@ export const audioTypeArray = [
 
 export interface VideoResolution {
 	name: string;
-		value: string;
-		choosed: boolean
+	value: string;
+	choosed: boolean;
 }
 
 export const videoResolutions: VideoResolution[] = [

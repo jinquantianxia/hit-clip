@@ -6,6 +6,7 @@ import AudioExtract from "@src/pages/AudioExtract/AudioExtract";
 import VideoMute from "@src/pages/VideoMute/VideoMute";
 
 interface Route {
+	id?: number;
 	path: string;
 	name: string;
 	component: JSX.Element;
@@ -26,6 +27,7 @@ import MainPage from "@src/pages/MainPage/MainPage";
 import MaterialSquare from "@src/pages/MaterialSquare/MaterialSquare";
 import AudioMaterialSquare from "@src/pages/AudioMaterialSquare/AudioMaterialSquare";
 import CombineVideoAndAudio from "@src/pages/CombineVideoAndAudio/CombineVideoAndAudio";
+import VideoCrop from "@src/pages/VideoCrop/VideoCrop";
 
 export const routers: Route[] = [
 	{
@@ -39,6 +41,7 @@ export const routers: Route[] = [
 		component: <VideoAndAudioTransform />,
 		children: [
 			{
+				id: 0,
 				path: "video_audio/video_transform",
 				name: "视频转换",
 				component: <VideoTransform />,
@@ -46,6 +49,7 @@ export const routers: Route[] = [
 				choosed: true,
 			},
 			{
+				id: 1,
 				path: "video_audio/video_mute",
 				name: "视频去声",
 				component: <VideoMute />,
@@ -53,13 +57,24 @@ export const routers: Route[] = [
 				choosed: false,
 			},
 			{
+				id: 2,
 				path: "video_audio/combine_audio",
 				name: "音视频混合",
 				component: <CombineVideoAndAudio />,
 				icon: <MailOutlined />,
 				choosed: false,
 			},
+
 			{
+				id: 3,
+				path: "video_audio/video_crop",
+				name: "视频裁剪",
+				component: <VideoCrop />,
+				icon: <MailOutlined />,
+				choosed: false,
+			},
+			{
+				id: 4,
 				path: "video_audio/audio_transform",
 				name: "音频转换",
 				component: <AudioTransform />,
@@ -80,6 +95,7 @@ export const routers: Route[] = [
 			// 	choosed: false,
 			// },
 			{
+				id: 5,
 				path: "video_audio/audio_extract",
 				name: "音频提取",
 				component: <AudioExtract />,

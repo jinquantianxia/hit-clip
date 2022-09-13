@@ -1,0 +1,164 @@
+.box {
+	height: calc(100vh - 35px);
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	.mainBox {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		.chooseBtn {
+			display: flex;
+			flex: 1;
+			justify-content: center;
+			align-items: center;
+		}
+		.videoWraperBox {
+			width: 100%;
+			height: 320px;
+			display: flex;
+			padding-top: 20px;
+			.videoWraper {
+				position: relative;
+				.videoBox {
+					height: 320px;
+				}
+				.cropLayer {
+					position: absolute;
+					top: 0;
+					width: 100%;
+					height: 100%;
+					background-color: rgba(0, 0, 0, 0.414);
+					.cropBox {
+						position: absolute;
+						border: 2px solid red;
+					}
+				}
+			}
+			.rightBtns {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				.btnBox {
+					width: 100%;
+					height: 60px;
+					display: flex;
+					justify-content: center;
+				}
+			}
+		}
+		.operateBox {
+			width: 100%;
+			height: 50px;
+			margin-top: 50px;
+			.sliderBox {
+				width: 100%;
+				height: 40px;
+				padding-right: 30px;
+				display: flex;
+				align-items: center;
+				.playBox {
+					width: 50px;
+					height: 20px;
+					display: flex;
+					justify-content: center;
+					img {
+						width: 20px;
+						height: 20px;
+					}
+				}
+				.slider {
+					flex: 1;
+				}
+			}
+		}
+	}
+	.controlBox {
+		height: 110px;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		.timeBox {
+			width: 200px;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			border: 1px solid rgb(131, 131, 131);
+			padding: 10px;
+			border-radius: 10px;
+			.titleBox {
+				width: 100%;
+				height: 30px;
+				margin-bottom: 10px;
+				display: flex;
+				align-items: center;
+				img {
+					width: 18px;
+					height: 18px;
+					margin-right: 5px;
+				}
+			}
+			.itemBox {
+				width: 100%;
+				height: 40px;
+				display: flex;
+				align-items: center;
+				.labelTitle {
+					padding-right: 5px;
+				}
+				.time {
+					height: 25px;
+					flex: 1;
+					margin-left: 10px;
+					border: 1px solid rgb(62, 221, 246);
+					padding: 0 10px;
+				}
+			}
+		}
+		.areaBox {
+			width: 350px;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			border: 1px solid rgb(131, 131, 131);
+			margin-left: 10px;
+			padding: 10px;
+			border-radius: 10px;
+			.titleBox {
+				width: 100%;
+				height: 30px;
+				margin-bottom: 10px;
+				display: flex;
+				align-items: center;
+				img {
+					width: 18px;
+					height: 18px;
+					margin-right: 5px;
+				}
+			}
+			.lineBox {
+				width: 100%;
+				display: flex;
+				.itemBox {
+					flex: 1;
+					height: 28px;
+					display: flex;
+					align-items: center;
+					.labelTitle {
+						width: 60px;
+						text-align: right;
+						padding-right: 5px;
+					}
+					.areaValue {
+						height: 25px;
+						flex: 1;
+						margin-left: 10px;
+						border: 1px solid rgb(62, 221, 246);
+						padding: 0 10px;
+					}
+				}
+			}
+		}
+	}
+}
