@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Spin, Slider, Button, Modal, Input } from "antd";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Spin, Slider, Button, Modal, Input, message } from "antd";
 import {
 	DeleteOutlined,
 	PlusSquareOutlined,
@@ -18,6 +18,7 @@ import { displayVideoTimeFormat } from "@src/utils/video";
 import timeIcon from "@src/assets/time.png";
 import cropIcon from "@src/assets/crop.png";
 import { filenameWithSuffix, fileSuffix } from "@src/utils/file";
+import { showFileExplorer } from "@src/backend_calls/common";
 
 export default function VideoCrop() {
 	const [spinning, setSpinning] = useState(false);
@@ -29,7 +30,11 @@ export default function VideoCrop() {
 	const [sliderMax, setSliderMax] = useState(0);
 	const [startTime, setStartTime] = useState("00:00:00");
 	const [endTime, setEndTime] = useState("00:00:00");
+	const canTrim = useMemo(() => {
+		return startTime !== "00:00:00" || endTime !== "00:00:00";
+	}, [startTime, endTime]);
 	const [outputDir, setOutputDir] = useState("");
+	const [rate, setRate] = useState(1);
 	const [clickX, setClickX] = useState(0);
 	const [clickY, setClickY] = useState(0);
 	const [x, setX] = useState(0);
@@ -46,6 +51,7 @@ export default function VideoCrop() {
 			}, 1000);
 		}
 	}, [videoLocalPath]);
+
 	const handleChooseFile = async () => {
 		// setSpinning(true);
 		const filePaths = (await selectFiles(FileTypes.VIDEO, false)) as string[];
@@ -99,30 +105,67 @@ export default function VideoCrop() {
 		setIsCrop(!isCrop);
 	};
 
-	const handleTransformOneClick = async () => {
+	const handleClickTrim = async () => {
 		setSpinning(true);
-		const output_file_path = `${videoLocalPath.split(".")[0]}_crop.${fileSuffix(
+		const output_file_path = `${videoLocalPath.split(".")[0]}_trim.${fileSuffix(
 			videoLocalPath
 		)}`;
-		// console.log("output_file_path", output_file_path);
-		console.log(
-			"videoLocalPath, output_file_path, startTime, endTime",
-			videoLocalPath,
-			output_file_path,
-			startTime,
-			endTime
-		);
 		await trimVideo(videoLocalPath, output_file_path, startTime, endTime);
-		// crop=w:h:x:y
-		const cropStr = `"crop=${w}:${h}:${x}:${y}"`;
-		const output_path = `${
-			videoLocalPath.split(".")[0]
-		}_crop_finish.${fileSuffix(videoLocalPath)}`;
-		await cropVideo(output_file_path, output_path, cropStr);
-		setSpinning(false);
+		setTimeout(() => {
+			setVideoLocalPath(output_file_path);
+			setStartTime("00:00:00");
+			setEndTime("00:00:00");
+			setSpinning(false);
+		}, 1000);
+	};
+
+	const handleTransformOneClick = async () => {
+		if (!canTrim && w === 0 && h === 0) {
+			message.info("您还没有选择截取的时间段或视频区域，无法一键转换！");
+			return;
+		}
+		setSpinning(true);
+		let output_file_path = videoLocalPath;
+		if (canTrim) {
+			output_file_path = `${videoLocalPath.split(".")[0]}_trim.${fileSuffix(
+				videoLocalPath
+			)}`;
+			// console.log("output_file_path", output_file_path);
+			console.log(
+				"videoLocalPath, output_file_path, startTime, endTime",
+				videoLocalPath,
+				output_file_path,
+				startTime,
+				endTime
+			);
+			await trimVideo(videoLocalPath, output_file_path, startTime, endTime);
+		}
+		if (w !== 0 && h !== 0) {
+			setTimeout(async () => {
+				// crop=w:h:x:y
+				const wt = Math.round(w / rate);
+				const ht = Math.round(h / rate);
+				const xt = Math.round(x / rate);
+				const yt = Math.round(y / rate);
+				const cropStr = `crop=${wt}:${ht}:${xt}:${yt}`;
+				const output_path = `${videoLocalPath.split(".")[0]}_crop.${fileSuffix(
+					videoLocalPath
+				)}`;
+				await cropVideo(output_file_path, output_path, cropStr);
+				setSpinning(false);
+			}, 1000);
+		} else {
+			setSpinning(false);
+		}
+	};
+
+	const handleVideoCanPlay = (e: any) => {
+		// video height 400
+		const rate = 400 / videoRef.current!.videoHeight;
+		setRate(rate);
 	};
 	return (
-		<Spin spinning={spinning}>
+		<Spin spinning={spinning} tip="转换中...">
 			<div className={styles.box}>
 				<div className={styles.mainBox}>
 					{!videoLocalPath ? (
@@ -142,6 +185,7 @@ export default function VideoCrop() {
 									ref={videoRef}
 									className={styles.videoBox}
 									src={videoUrl}
+									onCanPlay={handleVideoCanPlay}
 									controls
 								></video>
 								{isCrop && (
@@ -162,12 +206,24 @@ export default function VideoCrop() {
 									</div>
 								)}
 							</div>
-							<div className={styles.rightBtns}>
+							<div className={styles.btnsBox}>
 								<div className={styles.btnBox}>
-									<Button onClick={handleChooseFile}>更换视频</Button>
+									<Button
+										className={styles.btn}
+										onClick={() =>
+											showFileExplorer(fileSuffix(videoLocalPath, false))
+										}
+									>
+										打开所在文件夹
+									</Button>
 								</div>
 								<div className={styles.btnBox}>
-									<Button onClick={handleClickCropVideo}>
+									<Button className={styles.btn} onClick={handleChooseFile}>
+										更换视频
+									</Button>
+								</div>
+								<div className={styles.btnBox}>
+									<Button className={styles.btn} onClick={handleClickCropVideo}>
 										{isCrop ? "完成截取" : "截取区域"}
 									</Button>
 								</div>
@@ -183,10 +239,11 @@ export default function VideoCrop() {
 									<img src={playIcon} onClick={handleClickPlay} />
 								)}
 							</div> */}
+							<div className={styles.sliderTitle}>滑动截取时间段</div>
 							<div className={styles.slider}>
 								<Slider
 									range
-									defaultValue={[0, 1]}
+									defaultValue={[0, 0]}
 									min={0}
 									max={sliderMax}
 									tooltipPlacement="top"
@@ -197,6 +254,11 @@ export default function VideoCrop() {
 										displayVideoTimeFormat(value || 0)
 									}
 								/>
+							</div>
+							<div className={styles.trimBtn}>
+								<Button onClick={handleClickTrim} disabled={!canTrim}>
+									立即截取
+								</Button>
 							</div>
 						</div>
 					</div>

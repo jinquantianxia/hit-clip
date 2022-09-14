@@ -16,19 +16,19 @@
 		}
 		.videoWraperBox {
 			width: 100%;
-			height: 320px;
+			height: 400px;
 			display: flex;
 			padding-top: 20px;
 			.videoWraper {
 				position: relative;
 				.videoBox {
-					height: 320px;
+					height: 400px;
 				}
 				.cropLayer {
 					position: absolute;
 					top: 0;
 					width: 100%;
-					height: 100%;
+					height: 400px;
 					background-color: rgba(0, 0, 0, 0.414);
 					.cropBox {
 						position: absolute;
@@ -36,15 +36,24 @@
 					}
 				}
 			}
-			.rightBtns {
+			.btnsBox {
 				flex: 1;
+				height: 120px;
 				display: flex;
 				flex-direction: column;
+				border: 1px solid rgb(131, 131, 131);
+				border-radius: 10px;
+				padding: 5px;
+				margin-left: 10px;
+				margin-right: 10px;
 				.btnBox {
 					width: 100%;
-					height: 60px;
+					height: 40px;
 					display: flex;
 					justify-content: center;
+					.btn {
+						width: 100%;
+					}
 				}
 			}
 		}
@@ -58,18 +67,20 @@
 				padding-right: 30px;
 				display: flex;
 				align-items: center;
-				.playBox {
-					width: 50px;
-					height: 20px;
-					display: flex;
-					justify-content: center;
-					img {
-						width: 20px;
-						height: 20px;
-					}
+				.sliderTitle {
+					width: 120px;
+					height: 30px;
+					line-height: 30px;
+					font-size: 13px;
+					padding-left: 10px;
 				}
 				.slider {
 					flex: 1;
+				}
+				.trimBtn {
+					width: 80px;
+					height: 30px;
+					margin-left: 15px;
 				}
 			}
 		}
