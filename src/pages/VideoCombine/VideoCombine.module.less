@@ -1,0 +1,91 @@
+.box {
+	height: calc(100vh - 35px);
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	.container {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		.chooseBtn {
+			width: 100%;
+			padding: 10px 0;
+			display: flex;
+			justify-content: space-between;
+			border-bottom: 1px solid #ccc;
+			.targetNameBox {
+				width: 315px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background-color: #f97858;
+				color: #fff;
+				.targetTitle {
+					height: 30px;
+					line-height: 30px;
+					margin-right: 5px;
+				}
+			}
+		}
+		.displayBox {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.videoBox {
+				height: 430px;
+			}
+		}
+		.dragBox {
+			height: 100px;
+			display: flex;
+			flex-direction: column;
+			border-top: 1px solid #ccc;
+			.dragList {
+				width: 100%;
+				height: 80px;
+				background: rgb(157, 141, 141);
+				display: flex;
+				margin-top: 10px;
+				.dragItem {
+					flex: 1;
+					background: #fff;
+					border: 1px solid red;
+					display: flex;
+					flex-direction: column;
+					position: relative;
+					.deleteBox {
+						position: absolute;
+						right: 0;
+						top: 0;
+						width: 20px;
+						height: 20px;
+						img {
+							width: 20px;
+							height: 20px;
+							display: none;
+						}
+					}
+					&:hover {
+						background: #f97858;
+						color: #fff;
+						.deleteBox {
+							img {
+								display: block;
+							}
+						}
+					}
+					.videoName {
+						text-align: center;
+						height: 80px;
+						line-height: 80px;
+						white-space: nowrap;
+						overflow: hidden;
+						font-size: 15px;
+					}
+				}
+			}
+		}
+	}
+}

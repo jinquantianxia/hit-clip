@@ -26,19 +26,18 @@ export default function AudioTransform() {
 		return false;
 	}, [filesInfo]);
 	const handleChooseFile = async () => {
-		setSpinning(true);
 		const AudioList = filesInfo.slice();
 		const pathList = filesInfo.map((item) => item.filePath);
 		const filePaths = (await selectFiles(FileTypes.AUDIO)) as string[];
 		if (filePaths.length) {
+			setSpinning(true);
 			const files = await queryAudiosInfo(filePaths);
 			for (const file of files) {
 				if (!pathList.includes(file.filePath)) AudioList.push(file);
 			}
+			setSpinning(false);
+			setFileInfo(AudioList);
 		}
-
-		setSpinning(false);
-		setFileInfo(AudioList);
 	};
 
 	const handleAudioTargetFormatChange = (
@@ -172,7 +171,6 @@ export default function AudioTransform() {
 									fileInfo={item}
 									onHandleTargetFormatChange={handleAudioTargetFormatChange}
 									onHandleTransformClick={handleAudioTransformClick}
-									onHandleChoosed={handleChoosedAudio}
 									onHandleDelete={handleDeleteSingleAudio}
 								/>
 							);

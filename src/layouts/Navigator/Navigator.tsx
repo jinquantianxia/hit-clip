@@ -37,7 +37,7 @@ export default function Navigator() {
 			"sub1",
 			<MailOutlined />,
 			routers[1]
-				.children!.slice(0, 4)
+				.children!.slice(0, 6)
 				.map((item) => getItem(item.name, item.id, item.icon))
 		),
 		getItem(
@@ -45,7 +45,7 @@ export default function Navigator() {
 			"sub2",
 			<MailOutlined />,
 			routers[1]
-				.children!.slice(4)
+				.children!.slice(6)
 				.map((item) => getItem(item.name, item.id, item.icon))
 		),
 	];

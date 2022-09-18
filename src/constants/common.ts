@@ -18,6 +18,23 @@ export const audioTypeArray = [
 	"AC3",
 ];
 
+export const videoSpeedArray = [
+	"0.5x",
+	"0.7x",
+	"0.9x",
+	"1.5x",
+	"2x",
+	"2.5x",
+	"3x",
+	"3.5x",
+	"5x",
+	"10x",
+	"15x",
+	"30x",
+	"50x",
+	"100x",
+];
+
 export interface VideoResolution {
 	name: string;
 	value: string;

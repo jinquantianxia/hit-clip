@@ -27,7 +27,7 @@ interface Props {
 		format: string
 	) => void;
 	onHandleTransformClick: (fileInfo: AudioInfoObject) => void;
-	onHandleChoosed: (fileInfo: AudioInfoObject) => void;
+	// onHandleChoosed: (fileInfo: AudioInfoObject) => void;
 	onHandleDelete: (fileInfo: AudioInfoObject) => void;
 }
 
@@ -35,7 +35,7 @@ export default function AudioItemOperator({
 	fileInfo,
 	onHandleTargetFormatChange,
 	onHandleTransformClick,
-	onHandleChoosed,
+	// onHandleChoosed,
 	onHandleDelete,
 }: Props) {
 	const handleChange = (value: string) => {
@@ -105,14 +105,16 @@ export default function AudioItemOperator({
 									showFileExplorer(fileSuffix(fileInfo.filePath, false))
 								}
 							></Button>
-						) :<Button
-							type="default"
-							icon={<SyncOutlined />}
-							size="middle"
-							onClick={() => onHandleTransformClick(fileInfo)}
-						>
-							转换
-						</Button>}
+						) : (
+							<Button
+								type="default"
+								icon={<SyncOutlined />}
+								size="middle"
+								onClick={() => onHandleTransformClick(fileInfo)}
+							>
+								转换
+							</Button>
+						)}
 					</div>
 				</div>
 			</div>
@@ -122,7 +124,7 @@ export default function AudioItemOperator({
 			>
 				<img src={deleteIcon} className={styles.deleteIcon} />
 			</div>
-			<div
+			{/* <div
 				className={styles.chooseBox}
 				onClick={() => onHandleChoosed(fileInfo)}
 			>
@@ -131,7 +133,7 @@ export default function AudioItemOperator({
 				) : (
 					<img src={unchooseIcon} />
 				)}
-			</div>
+			</div> */}
 		</div>
 	);
 }

@@ -31,19 +31,18 @@ export default function VideoTransform() {
 		return false;
 	}, [filesInfo]);
 	const handleChooseFile = async () => {
-		setSpinning(true);
 		const videoList = filesInfo.slice();
 		const pathList = filesInfo.map((item) => item.filePath);
 		const filePaths = (await selectFiles(FileTypes.VIDEO)) as string[];
 		if (filePaths.length) {
+			setSpinning(true);
 			const files = await queryVideosInfo(filePaths);
 			for (const file of files) {
 				if (!pathList.includes(file.filePath)) videoList.push(file);
 			}
+			setSpinning(false);
+			setFileInfo(videoList);
 		}
-
-		setSpinning(false);
-		setFileInfo(videoList);
 	};
 
 	const handleVideoTargetFormatChange = (
@@ -208,7 +207,6 @@ export default function VideoTransform() {
 									fileInfo={item}
 									onHandleTargetFormatChange={handleVideoTargetFormatChange}
 									onHandleTransformClick={handleVideoTransformClick}
-									onHandleChoosed={handleChoosedVideo}
 									onHandleDelete={handleDeleteSingleVideo}
 									onHandleChangeTargetResolution={handleChangeTargetResolution}
 								/>

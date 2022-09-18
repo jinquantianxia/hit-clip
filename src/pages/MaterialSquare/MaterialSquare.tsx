@@ -13,7 +13,7 @@ import KeepAlive from "react-activation";
 
 export default function MaterialSquare() {
 	const navigate = useNavigate();
-	const [current, setCurrent] = useState("mail");
+	const [current, setCurrent] = useState("audio");
 	useEffect(() => {
 		navigate(routers[2].children![0].path);
 	}, []);
@@ -24,8 +24,8 @@ export default function MaterialSquare() {
 	const items: MenuProps["items"] = [
 		{
 			label: "音频素材",
-			key: "mail",
-			icon: <MailOutlined />,
+			key: "audio",
+			// icon: <MailOutlined />,
 		},
 		// {
 		// 	label: "视频素材",

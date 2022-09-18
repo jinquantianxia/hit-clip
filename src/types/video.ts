@@ -10,4 +10,5 @@ export interface VideoInfoObject {
 	choosed: boolean;
 	successed: boolean;
 	targetFormat?: string;
+	targetSpeed?: string;
 }

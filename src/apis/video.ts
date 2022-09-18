@@ -58,6 +58,7 @@ export async function queryVideosInfo(
 				targetFormat: isToAudio ? "MP3" : "MP4",
 				choosed: false,
 				successed: false,
+				targetSpeed: "0.5x",
 			};
 			for (let line of infoArray) {
 				if (line.includes("file_size")) {
@@ -69,9 +70,16 @@ export async function queryVideosInfo(
 					retObj.duration = arr[0].split(": ")[1];
 				}
 				if (line.includes("Video:")) {
-					const arr = line.split(",");
-					retObj.originResolution = arr[2];
-					retObj.resolution = arr[2];
+					let arr = line.split(",");
+					const resolutionLine = arr.slice(-5)[0];
+					// console.log("resolutionLine:", resolutionLine);
+					arr = resolutionLine.split("x");
+					const first = arr[0];
+					let second = arr[1];
+					second = second.substring(0, first.length);
+					const resolution = `${first}x${second}`;
+					retObj.originResolution = resolution;
+					retObj.resolution = resolution;
 				}
 			}
 			console.log("video info output: " + retObj);
@@ -134,6 +142,34 @@ export async function cropVideo(
 		input: input_file_path,
 		output: output_file_path,
 		extra: crop,
+	});
+	console.log("trimVideo output: " + ret);
+	return ret;
+}
+
+export async function combineVideos(
+	input_file_path: string,
+	output_file_path: string,
+	extra: string
+) {
+	const ret = await fetchPost(REQ_PATHS.COMBINE_VIDEOS, {
+		input: input_file_path,
+		output: output_file_path,
+		extra,
+	});
+	console.log("trimVideo output: " + ret);
+	return ret;
+}
+
+export async function speedUpVideos(
+	input_file_path: string,
+	output_file_path: string,
+	extra: string
+) {
+	const ret = await fetchPost(REQ_PATHS.SPEED_UP_VIDEO, {
+		input: input_file_path,
+		output: output_file_path,
+		extra,
 	});
 	console.log("trimVideo output: " + ret);
 	return ret;

@@ -17,37 +17,53 @@ import {
 	SyncOutlined,
 } from "@ant-design/icons";
 import { VideoInfoObject } from "@src/types/video";
-import { videoTypeArray, audioTypeArray } from "@src/constants/common";
+import {
+	videoTypeArray,
+	audioTypeArray,
+	videoSpeedArray,
+} from "@src/constants/common";
 import { showFileExplorer } from "@src/backend_calls/common";
 
 interface Props {
 	fileInfo: VideoInfoObject;
 	isToAudio?: boolean;
 	canModifyResolution?: boolean;
-	onHandleTargetFormatChange: (
+	canModifyType?: boolean;
+	showTargetDurations?: boolean;
+	showChangeSpeed?: boolean;
+	onHandleTargetFormatChange?: (
 		fileInfo: VideoInfoObject,
 		format: string
 	) => void;
-	onHandleTransformClick: (fileInfo: VideoInfoObject) => void;
-	onHandleChoosed: (fileInfo: VideoInfoObject) => void;
+	onHandleTransformClick?: (fileInfo: VideoInfoObject) => void;
 	onHandleDelete: (fileInfo: VideoInfoObject) => void;
 	onHandleChangeTargetResolution?: (fileInfo: VideoInfoObject) => void;
+	onHandleChangeSpeed?: (fileInfo: VideoInfoObject, speed: string) => void;
 }
 
 export default function VideoItemOperator({
 	fileInfo,
 	isToAudio = false,
 	canModifyResolution = false,
-	onHandleTargetFormatChange,
-	onHandleTransformClick,
-	onHandleChoosed,
+	canModifyType = true,
+	showTargetDurations = true,
+	showChangeSpeed = false,
+	onHandleTargetFormatChange = () => {},
+	onHandleTransformClick = () => {},
 	onHandleDelete,
 	onHandleChangeTargetResolution = () => {},
+	onHandleChangeSpeed = () => {},
 }: Props) {
 	const handleChange = (value: string) => {
 		console.log(`selected ${value}`);
 		onHandleTargetFormatChange(fileInfo, value);
 	};
+
+	const handleChangeSpeed = (value: string) => {
+		console.log(`selected ${value}`);
+		onHandleChangeSpeed(fileInfo, value);
+	};
+
 	return (
 		<div
 			className={styles.videoItemBox}
@@ -79,26 +95,32 @@ export default function VideoItemOperator({
 						<img src={transIcon} className={styles.transIcon} />
 					</div>
 					<div className={styles.videoInfoBox}>
-						<div className={styles.videoInfoItem}>
-							格式:{" "}
-							<select onChange={(e) => handleChange(e.target.value)}>
-								{isToAudio
-									? audioTypeArray.map((video) => {
-											return (
-												<option key={video} value={video}>
-													{video}
-												</option>
-											);
-									  })
-									: videoTypeArray.map((video) => {
-											return (
-												<option key={video} value={video}>
-													{video}
-												</option>
-											);
-									  })}
-							</select>
-						</div>
+						{canModifyType ? (
+							<div className={styles.videoInfoItem}>
+								格式:{" "}
+								<select onChange={(e) => handleChange(e.target.value)}>
+									{isToAudio
+										? audioTypeArray.map((video) => {
+												return (
+													<option key={video} value={video}>
+														{video}
+													</option>
+												);
+										  })
+										: videoTypeArray.map((video) => {
+												return (
+													<option key={video} value={video}>
+														{video}
+													</option>
+												);
+										  })}
+								</select>
+							</div>
+						) : (
+							<div className={styles.videoInfoItem}>
+								格式: {fileInfo.format}
+							</div>
+						)}
 						{isToAudio ? (
 							<div className={styles.videoInfoItem}></div>
 						) : canModifyResolution ? (
@@ -118,9 +140,25 @@ export default function VideoItemOperator({
 							</div>
 						)}
 
-						<div className={styles.videoInfoItem}>
-							时长: {fileInfo.duration}
-						</div>
+						{showTargetDurations && (
+							<div className={styles.videoInfoItem}>
+								时长: {fileInfo.duration}
+							</div>
+						)}
+						{showChangeSpeed && (
+							<div className={styles.videoInfoItem}>
+								速率:{" "}
+								<select onChange={(e) => handleChangeSpeed(e.target.value)}>
+									{videoSpeedArray.map((video) => {
+										return (
+											<option key={video} value={video}>
+												{video}
+											</option>
+										);
+									})}
+								</select>
+							</div>
+						)}
 					</div>
 					{/* <div className={styles.setBox}>
 						<Button type="primary" icon={<EditOutlined />} size="middle">
@@ -157,7 +195,7 @@ export default function VideoItemOperator({
 			>
 				<img src={deleteIcon} className={styles.deleteIcon} />
 			</div>
-			<div
+			{/* <div
 				className={styles.chooseBox}
 				onClick={() => onHandleChoosed(fileInfo)}
 			>
@@ -166,7 +204,7 @@ export default function VideoItemOperator({
 				) : (
 					<img src={unchooseIcon} />
 				)}
-			</div>
+			</div> */}
 		</div>
 	);
 }

@@ -1,17 +1,17 @@
 import React, { useState, useMemo } from "react";
-import { Spin, message, Button } from "antd";
+import { Spin, message, Button, Modal } from "antd";
 import {
 	DeleteOutlined,
 	PlusSquareOutlined,
 	EditOutlined,
 	SyncOutlined,
 } from "@ant-design/icons";
-import styles from "./VideoMute.module.less";
+import styles from "./VideoChangeSpeed.module.less";
 import { selectFiles, selectDir } from "@src/utils/file";
 import {
 	queryVideosInfo,
 	convertVideoToOtherVideoType,
-	removeAudioFromVideo,
+	speedUpVideos,
 } from "@src/apis/video";
 import { VideoInfoObject } from "@src/types/video";
 import VideoItemOperator from "@src/components/VideoItemOperator/VideoItemOperator";
@@ -21,7 +21,7 @@ import { FileTypes } from "@src/types/common";
 import CommonBlankTip from "@src/components/CommonBlankTip/CommonBlankTip";
 import CommonBottom from "@src/components/CommonBottom/CommonBottom";
 
-export default function VideoMute() {
+export default function VideoChangeSpeed() {
 	const [spinning, setSpinning] = useState(false);
 	const [filesInfo, setFileInfo] = useState<VideoInfoObject[]>([]);
 	const [outputDir, setOutputDir] = useState("");
@@ -45,15 +45,11 @@ export default function VideoMute() {
 		}
 	};
 
-	const handleVideoTargetFormatChange = (
-		fileInfo: VideoInfoObject,
-		format: string
-	) => {
+	const handleChangeSpeed = (fileInfo: VideoInfoObject, speed: string) => {
 		const fileList = filesInfo.slice();
-		const length = fileList.length;
 		for (let file of fileList) {
 			if (file.filePath === fileInfo.filePath) {
-				file.targetFormat = format;
+				file.targetSpeed = speed;
 				break;
 			}
 		}
@@ -81,9 +77,18 @@ export default function VideoMute() {
 		const output_file_path = `${outputDir}\\${filenameWithSuffix(
 			fileInfo.filePath,
 			false
-		)}_mute.${fileInfo.targetFormat?.toLocaleLowerCase()}`;
+		)}_speed.${fileInfo.targetFormat?.toLocaleLowerCase()}`;
+		let rate = parseFloat(fileInfo.targetSpeed!);
+		console.log("rate", rate);
+		const videoRate = (1 / rate).toFixed(2);
+		console.log("videoRate", videoRate, "audioRate", rate);
+		const rateStr = `${videoRate},${rate}`;
 		console.log("output_file_path:", output_file_path);
-		await removeAudioFromVideo(fileInfo.filePath, output_file_path);
+		const ret = await speedUpVideos(
+			fileInfo.filePath,
+			output_file_path,
+			rateStr
+		);
 		const arr = filesInfo.slice();
 		for (let item of arr) {
 			if (item.filePath === fileInfo.filePath) {
@@ -142,6 +147,7 @@ export default function VideoMute() {
 		unchoosedList.forEach((item) => (item.choosed = false));
 		setFileInfo(unchoosedList);
 	};
+
 	return (
 		<Spin spinning={spinning}>
 			<div className={styles.box}>
@@ -173,11 +179,14 @@ export default function VideoMute() {
 						filesInfo.map((item) => {
 							return (
 								<VideoItemOperator
-									canModifyType={false}
+									key={item.filePath}
 									fileInfo={item}
-									onHandleTargetFormatChange={handleVideoTargetFormatChange}
+									canModifyType={false}
+									showTargetDurations={false}
+									showChangeSpeed={true}
 									onHandleTransformClick={handleVideoTransformClick}
 									onHandleDelete={handleDeleteSingleVideo}
+									onHandleChangeSpeed={handleChangeSpeed}
 								/>
 							);
 						})

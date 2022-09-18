@@ -5,6 +5,8 @@ export const enum REQ_PATHS {
 	TRIM_VIDEO = "/video/trim",
 	CROP_VIDEO = "/video/crop",
 	QUERY_VIDEO_INFO = "/video/info",
+	COMBINE_VIDEOS = "/video/combine",
+	SPEED_UP_VIDEO = "/video/speed_up",
 	QUERY_AUDIO_INFO = "/audio/info",
 	CONVERT_AUDIO_TO_OTHER_FORMAT = "/audio/convert_to_other_format",
 	REMOVE_AUDIO_FROM_VIDEO = "/video/remove_audio",
