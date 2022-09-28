@@ -24,6 +24,7 @@ export default function VideoCrop() {
 	const [spinning, setSpinning] = useState(false);
 	const [showPause, setShowPause] = useState(true);
 	const videoRef = useRef<HTMLVideoElement>(null);
+	const videoWrperRef = useRef<HTMLDivElement>(null);
 	const [isCrop, setIsCrop] = useState(false);
 	const [videoLocalPath, setVideoLocalPath] = useState("");
 	const [videoUrl, setVideoUrl] = useState("");
@@ -41,6 +42,8 @@ export default function VideoCrop() {
 	const [y, setY] = useState(0);
 	const [w, setW] = useState(0);
 	const [h, setH] = useState(0);
+	const [wraperX, setWraperX] = useState(0);
+	const [wraperY, setWraperY] = useState(0);
 
 	useEffect(() => {
 		if (videoLocalPath) {
@@ -50,6 +53,11 @@ export default function VideoCrop() {
 				setSliderMax(Math.round(videoRef.current!.duration));
 			}, 1000);
 		}
+		setTimeout(() => {
+			setWraperX(videoWrperRef.current!.offsetLeft);
+			setWraperY(videoWrperRef.current!.offsetTop);
+			// console.log("videoRef", videoWrperRef);
+		}, 1000);
 	}, [videoLocalPath]);
 
 	const handleChooseFile = async () => {
@@ -88,9 +96,9 @@ export default function VideoCrop() {
 
 	const handleCropMouseDown = (e: any) => {
 		// x 210 y 55
-		setX(e.pageX - 210);
+		setX(e.pageX - wraperX - 210);
 		setClickX(e.pageX);
-		setY(e.pageY - 55);
+		setY(e.pageY - wraperY - 35);
 		setClickY(e.pageY);
 		// console.log("e", e);
 	};
@@ -107,9 +115,10 @@ export default function VideoCrop() {
 
 	const handleClickTrim = async () => {
 		setSpinning(true);
-		const output_file_path = `${videoLocalPath.split(".")[0]}_trim.${fileSuffix(
+		const output_file_path = `${outputDir}\\trim_${filenameWithSuffix(
 			videoLocalPath
 		)}`;
+		console.log("output_file_path:", output_file_path);
 		await trimVideo(videoLocalPath, output_file_path, startTime, endTime);
 		setTimeout(() => {
 			setVideoLocalPath(output_file_path);
@@ -125,9 +134,9 @@ export default function VideoCrop() {
 			return;
 		}
 		setSpinning(true);
-		let output_file_path = videoLocalPath;
+		let output_file_path = outputDir;
 		if (canTrim) {
-			output_file_path = `${videoLocalPath.split(".")[0]}_trim.${fileSuffix(
+			output_file_path = `${outputDir}\\trim_${filenameWithSuffix(
 				videoLocalPath
 			)}`;
 			// console.log("output_file_path", output_file_path);
@@ -139,6 +148,7 @@ export default function VideoCrop() {
 				endTime
 			);
 			await trimVideo(videoLocalPath, output_file_path, startTime, endTime);
+			setVideoLocalPath(output_file_path);
 		}
 		if (w !== 0 && h !== 0) {
 			setTimeout(async () => {
@@ -148,10 +158,12 @@ export default function VideoCrop() {
 				const xt = Math.round(x / rate);
 				const yt = Math.round(y / rate);
 				const cropStr = `crop=${wt}:${ht}:${xt}:${yt}`;
-				const output_path = `${videoLocalPath.split(".")[0]}_crop.${fileSuffix(
+				const output_path = `${outputDir}\\crop_${filenameWithSuffix(
 					videoLocalPath
 				)}`;
-				await cropVideo(output_file_path, output_path, cropStr);
+				const input_file_path = canTrim ? output_file_path : videoLocalPath;
+				await cropVideo(input_file_path, output_path, cropStr);
+				setVideoLocalPath(output_path);
 				setSpinning(false);
 			}, 1000);
 		} else {
@@ -164,6 +176,7 @@ export default function VideoCrop() {
 		const rate = 400 / videoRef.current!.videoHeight;
 		setRate(rate);
 	};
+
 	return (
 		<Spin spinning={spinning} tip="转换中...">
 			<div className={styles.box}>
@@ -180,7 +193,7 @@ export default function VideoCrop() {
 						</div>
 					) : (
 						<div className={styles.videoWraperBox}>
-							<div className={styles.videoWraper}>
+							<div className={styles.videoWraper} ref={videoWrperRef}>
 								<video
 									ref={videoRef}
 									className={styles.videoBox}
@@ -206,28 +219,6 @@ export default function VideoCrop() {
 									</div>
 								)}
 							</div>
-							<div className={styles.btnsBox}>
-								<div className={styles.btnBox}>
-									<Button
-										className={styles.btn}
-										onClick={() =>
-											showFileExplorer(fileSuffix(videoLocalPath, false))
-										}
-									>
-										打开所在文件夹
-									</Button>
-								</div>
-								<div className={styles.btnBox}>
-									<Button className={styles.btn} onClick={handleChooseFile}>
-										更换视频
-									</Button>
-								</div>
-								<div className={styles.btnBox}>
-									<Button className={styles.btn} onClick={handleClickCropVideo}>
-										{isCrop ? "完成截取" : "截取区域"}
-									</Button>
-								</div>
-							</div>
 						</div>
 					)}
 					<div className={styles.operateBox}>
@@ -243,6 +234,7 @@ export default function VideoCrop() {
 							<div className={styles.slider}>
 								<Slider
 									range
+									step={1}
 									defaultValue={[0, 0]}
 									min={0}
 									max={sliderMax}
@@ -286,22 +278,64 @@ export default function VideoCrop() {
 						<div className={styles.lineBox}>
 							<div className={styles.itemBox}>
 								<div className={styles.labelTitle}>左边距</div>
-								<div className={styles.areaValue}>{x}</div>
+								{/* <div className={styles.areaValue}>{x}</div> */}
+								<input
+									className={styles.areaValue}
+									value={x}
+									onChange={(e) => setX(Number(e.target.value))}
+								/>
 							</div>
 							<div className={styles.itemBox}>
 								<div className={styles.labelTitle}>上边距</div>
-								<div className={styles.areaValue}>{y}</div>
+								{/* <div className={styles.areaValue}>{y}</div> */}
+								<input
+									className={styles.areaValue}
+									value={y}
+									onChange={(e) => setY(Number(e.target.value))}
+								/>
 							</div>
 						</div>
 						<div className={styles.lineBox}>
 							<div className={styles.itemBox}>
 								<div className={styles.labelTitle}>宽度</div>
-								<div className={styles.areaValue}>{w}</div>
+								{/* <div className={styles.areaValue}>{w}</div> */}
+								<input
+									className={styles.areaValue}
+									value={w}
+									onChange={(e) => setW(Number(e.target.value))}
+								/>
 							</div>
 							<div className={styles.itemBox}>
 								<div className={styles.labelTitle}>高度</div>
-								<div className={styles.areaValue}>{h}</div>
+								{/* <div className={styles.areaValue}>{h}</div> */}
+								<input
+									className={styles.areaValue}
+									value={h}
+									onChange={(e) => setH(Number(e.target.value))}
+								/>
 							</div>
+						</div>
+					</div>
+					<div className={styles.btnsBox}>
+						<div className={styles.btnBox}>
+							<Button
+								className={styles.btn}
+								onClick={() =>
+									showFileExplorer(fileSuffix(videoLocalPath, false))
+								}
+							>
+								打开所在文件夹
+							</Button>
+						</div>
+						<div className={styles.btnBox}>
+							<Button className={styles.btn} onClick={handleChooseFile}>
+								更换视频
+							</Button>
+						</div>
+						<div className={styles.btnBox}>
+							<Button className={styles.btn} onClick={handleClickCropVideo}>
+								{isCrop ? "完成截取" : "截取区域"}
+							</Button>
 						</div>
 					</div>
 				</div>

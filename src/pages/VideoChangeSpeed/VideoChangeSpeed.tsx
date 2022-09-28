@@ -77,7 +77,7 @@ export default function VideoChangeSpeed() {
 		const output_file_path = `${outputDir}\\${filenameWithSuffix(
 			fileInfo.filePath,
 			false
-		)}_speed.${fileInfo.targetFormat?.toLocaleLowerCase()}`;
+		)}_speed.${fileInfo.format.toLocaleLowerCase()}`;
 		let rate = parseFloat(fileInfo.targetSpeed!);
 		console.log("rate", rate);
 		const videoRate = (1 / rate).toFixed(2);

@@ -1,6 +1,10 @@
 import { open } from "@tauri-apps/api/dialog";
 import { FileTypes } from "@src/types/common";
-import { videoTypeArray, audioTypeArray } from "@src/constants/common";
+import {
+	videoTypeArray,
+	audioTypeArray,
+	subtitleTypeArray,
+} from "@src/constants/common";
 
 export async function selectFiles(type: FileTypes, multiple = true) {
 	let extensions: string[] = [];
@@ -10,6 +14,9 @@ export async function selectFiles(type: FileTypes, multiple = true) {
 			break;
 		case FileTypes.VIDEO:
 			extensions = videoTypeArray;
+			break;
+		case FileTypes.SUBTITLE:
+			extensions = subtitleTypeArray;
 			break;
 		default:
 			break;

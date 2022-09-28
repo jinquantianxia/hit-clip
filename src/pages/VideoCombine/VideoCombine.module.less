@@ -8,6 +8,7 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		overflow: hidden;
 		.chooseBtn {
 			width: 100%;
 			padding: 10px 0;
@@ -39,15 +40,31 @@
 		}
 		.dragBox {
 			height: 100px;
+			width: 100%;
+			overflow: hidden;
 			display: flex;
 			flex-direction: column;
 			border-top: 1px solid #ccc;
 			.dragList {
-				width: 100%;
 				height: 80px;
+				overflow-x: auto;
 				background: rgb(157, 141, 141);
 				display: flex;
 				margin-top: 10px;
+				&::-webkit-scrollbar {
+					height: 8px;
+				}
+
+				&::-webkit-scrollbar-thumb {
+					-webkit-box-shadow: inset 0 0 5px #cdd1d1;
+					-webkit-border-radius: 6px;
+					background: #555656;
+				}
+
+				&::-webkit-scrollbar-track {
+					-webkit-border-radius: 6px;
+					background: #f1f2f3;
+				}
 				.dragItem {
 					flex: 1;
 					background: #fff;

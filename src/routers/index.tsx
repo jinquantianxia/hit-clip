@@ -15,11 +15,14 @@ interface Route {
 	children?: Route[];
 }
 import {
-	AppstoreOutlined,
-	CalendarOutlined,
-	LinkOutlined,
-	MailOutlined,
-	SettingOutlined,
+	ScissorOutlined,
+	CustomerServiceOutlined,
+	DeleteRowOutlined,
+	SwapOutlined,
+	OneToOneOutlined,
+	AudioMutedOutlined,
+	ApartmentOutlined,
+	FileTextOutlined,
 } from "@ant-design/icons";
 import KeepAlive from "react-activation";
 import VideoAndAudioTransform from "@src/pages/VideoAndAudioTransform/VideoAndAudioTransform";
@@ -30,100 +33,20 @@ import CombineVideoAndAudio from "@src/pages/CombineVideoAndAudio/CombineVideoAn
 import VideoCrop from "@src/pages/VideoCrop/VideoCrop";
 import ContentDistribution from "@src/pages/ContentDistribution/ContentDistribution";
 import VideoCombine from "@src/pages/VideoCombine/VideoCombine";
+import CombineVideoAndSubtitle from "@src/pages/CombineVideoAndSubtitle/CombineVideoAndSubtitle";
 import VideoChangeSpeed from "@src/pages/VideoChangeSpeed/VideoChangeSpeed";
+import AudioCrop from "@src/pages/AudioCrop/AudioCrop";
+import AudioPartialSilent from "@src/pages/AudioPartialSilent/AudioPartialSilent";
 import ContentDistributionWX from "@src/pages/ContentDistributionWX/ContentDistributionWX";
 import ContentDistributionDY from "@src/pages/ContentDistributionDY/ContentDistributionDY";
 import ContentDistributionKS from "@src/pages/ContentDistributionKS/ContentDistributionKS";
+import SynthesisAudio from "@src/pages/SynthesisAudio/SynthesisAudio";
 
 export const routers: Route[] = [
 	{
 		path: "/",
 		name: "首页",
 		component: <MainPage />,
-	},
-	{
-		path: "/video_audio/*",
-		name: "视频转换",
-		component: <VideoAndAudioTransform />,
-		children: [
-			{
-				id: 0,
-				path: "video_audio/video_transform",
-				name: "视频转换",
-				component: <VideoTransform />,
-				icon: <AppstoreOutlined />,
-				choosed: true,
-			},
-			{
-				id: 1,
-				path: "video_audio/video_mute",
-				name: "视频去声",
-				component: <VideoMute />,
-				icon: <MailOutlined />,
-				choosed: false,
-			},
-			{
-				id: 2,
-				path: "video_audio/combine_audio",
-				name: "音视频混合",
-				component: <CombineVideoAndAudio />,
-				icon: <MailOutlined />,
-				choosed: false,
-			},
-			{
-				id: 3,
-				path: "video_audio/video_speed",
-				name: "视频变速",
-				component: <VideoChangeSpeed />,
-				icon: <MailOutlined />,
-				choosed: false,
-			},
-			{
-				id: 4,
-				path: "video_audio/video_crop",
-				name: "视频裁剪",
-				component: <VideoCrop />,
-				icon: <MailOutlined />,
-				choosed: false,
-			},
-			{
-				id: 5,
-				path: "video_audio/video_combine",
-				name: "视频拼接",
-				component: <VideoCombine />,
-				icon: <MailOutlined />,
-				choosed: false,
-			},
-			{
-				id: 6,
-				path: "video_audio/audio_transform",
-				name: "音频转换",
-				component: <AudioTransform />,
-				icon: <CalendarOutlined />,
-				choosed: false,
-			},
-
-			// {
-			// 	path: "/video_compress",
-			// 	name: "视频压缩",
-			// 	component: <VideoCompress />,
-			// 	choosed: false,
-			// },
-			// {
-			// 	path: "/video_to_gif",
-			// 	name: "视频转GIF",
-			// 	component: <VideoToGIF />,
-			// 	choosed: false,
-			// },
-			{
-				id: 7,
-				path: "video_audio/audio_extract",
-				name: "音频提取",
-				component: <AudioExtract />,
-				icon: <LinkOutlined />,
-				choosed: false,
-			},
-		],
 	},
 	{
 		path: "/marerial_square/*",
@@ -138,8 +61,122 @@ export const routers: Route[] = [
 		],
 	},
 	{
+		path: "/video_audio/*",
+		name: "音视频处理",
+		component: <VideoAndAudioTransform />,
+		children: [
+			{
+				id: 0,
+				path: "video_audio/video_transform",
+				name: "视频转换",
+				component: <VideoTransform />,
+				icon: <SwapOutlined />,
+				choosed: true,
+			},
+
+			{
+				id: 1,
+				path: "video_audio/video_mute",
+				name: "视频去声",
+				component: <VideoMute />,
+				icon: <AudioMutedOutlined />,
+				choosed: false,
+			},
+			{
+				id: 2,
+				path: "video_audio/combine_audio",
+				name: "音视频混合",
+				component: <CombineVideoAndAudio />,
+				icon: <ApartmentOutlined />,
+				choosed: false,
+			},
+			{
+				id: 3,
+				path: "video_audio/combine_subtitle",
+				name: "字幕混合",
+				component: <CombineVideoAndSubtitle />,
+				icon: <FileTextOutlined />,
+				choosed: false,
+			},
+			{
+				id: 4,
+				path: "video_audio/audio_extract",
+				name: "提取音频",
+				component: <AudioExtract />,
+				icon: <CustomerServiceOutlined />,
+				choosed: false,
+			},
+			{
+				id: 5,
+				path: "video_audio/video_speed",
+				name: "视频变速",
+				component: <VideoChangeSpeed />,
+				icon: <DeleteRowOutlined />,
+				choosed: false,
+			},
+			{
+				id: 6,
+				path: "video_audio/video_crop",
+				name: "视频裁剪",
+				component: <VideoCrop />,
+				icon: <ScissorOutlined />,
+				choosed: false,
+			},
+			{
+				id: 7,
+				path: "video_audio/video_combine",
+				name: "视频拼接",
+				component: <VideoCombine />,
+				icon: <OneToOneOutlined />,
+				choosed: false,
+			},
+			{
+				id: 8,
+				path: "video_audio/audio_transform",
+				name: "音频转换",
+				component: <AudioTransform />,
+				icon: <SwapOutlined />,
+				choosed: false,
+			},
+			{
+				id: 9,
+				path: "video_audio/audio_crop",
+				name: "音频裁剪",
+				component: <AudioCrop />,
+				icon: <ScissorOutlined />,
+				choosed: false,
+			},
+			{
+				id: 10,
+				path: "video_audio/audio_partial_silent",
+				name: "局部静音",
+				component: <AudioPartialSilent />,
+				icon: <AudioMutedOutlined />,
+				choosed: false,
+			},
+			// {
+			// 	path: "/video_compress",
+			// 	name: "视频压缩",
+			// 	component: <VideoCompress />,
+			// 	choosed: false,
+			// },
+			// {
+			// 	path: "/video_to_gif",
+			// 	name: "视频转GIF",
+			// 	component: <VideoToGIF />,
+			// 	choosed: false,
+			// },
+		],
+	},
+	{
+		path: "/synthesis_audio",
+		name: "语音合成",
+		component: <SynthesisAudio />,
+	},
+
+	{
 		path: "/content_distribute/*",
-		name: "内容分发中心",
+		name: "分发中心",
 		component: <ContentDistribution />,
 		children: [
 			{

@@ -169,6 +169,7 @@ export default function VideoTransform() {
 						filesInfo.map((item) => {
 							return (
 								<VideoItemOperator
+									key={item.filePath}
 									isToAudio={true}
 									fileInfo={item}
 									onHandleTargetFormatChange={handleVideoTargetFormatChange}

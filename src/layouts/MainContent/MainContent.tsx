@@ -8,12 +8,14 @@ export default function MainContent() {
 	return (
 		<div className={styles.box}>
 			<Routes>
-				{routers[1].children!.map((router) => {
+				{routers[2].children!.map((router) => {
 					return (
 						<Route
 							key={router.path}
 							path={router.path}
-							element={router.component}
+							element={
+								<KeepAlive cacheKey={router.name}>{router.component}</KeepAlive>
+							}
 						/>
 					);
 				})}

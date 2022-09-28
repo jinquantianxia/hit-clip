@@ -35,6 +35,20 @@ export async function convertVideoToOtherVideoType(
 	return ret;
 }
 
+export async function videoConvertMKVToMP4(
+	input_file_path: string,
+	output_file_path: string,
+	extra = ""
+) {
+	const ret = await fetchPost(REQ_PATHS.VIDEO_CONVERT_MKV_TO_MP4, {
+		input: input_file_path,
+		output: output_file_path,
+		extra,
+	});
+	console.log("convert_video_to_other_format output: " + ret);
+	return ret;
+}
+
 export async function queryVideosInfo(
 	inputFilesPath: string[],
 	isToAudio = false
@@ -69,17 +83,23 @@ export async function queryVideosInfo(
 					const arr = line.split(",");
 					retObj.duration = arr[0].split(": ")[1];
 				}
-				if (line.includes("Video:")) {
+				if (retObj.format === "mkv") {
 					let arr = line.split(",");
-					const resolutionLine = arr.slice(-5)[0];
-					// console.log("resolutionLine:", resolutionLine);
-					arr = resolutionLine.split("x");
-					const first = arr[0];
-					let second = arr[1];
-					second = second.substring(0, first.length);
-					const resolution = `${first}x${second}`;
-					retObj.originResolution = resolution;
-					retObj.resolution = resolution;
+					retObj.originResolution = arr.slice(-4)[0];
+					retObj.resolution = arr.slice(-4)[0];
+				} else {
+					if (line.includes("Video:")) {
+						let arr = line.split(",");
+						const resolutionLine = arr.slice(-5)[0];
+						// console.log("resolutionLine:", resolutionLine);
+						arr = resolutionLine.split("x");
+						const first = arr[0];
+						let second = arr[1];
+						second = second.substring(0, first.length);
+						const resolution = `${first}x${second}`;
+						retObj.originResolution = resolution;
+						retObj.resolution = resolution;
+					}
 				}
 			}
 			console.log("video info output: " + retObj);
@@ -167,6 +187,20 @@ export async function speedUpVideos(
 	extra: string
 ) {
 	const ret = await fetchPost(REQ_PATHS.SPEED_UP_VIDEO, {
+		input: input_file_path,
+		output: output_file_path,
+		extra,
+	});
+	console.log("trimVideo output: " + ret);
+	return ret;
+}
+
+export async function combineVideoSubtitle(
+	input_file_path: string,
+	output_file_path: string,
+	extra: string
+) {
+	const ret = await fetchPost(REQ_PATHS.COMBINE_VIDEO_SUBTITLE, {
 		input: input_file_path,
 		output: output_file_path,
 		extra,

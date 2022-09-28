@@ -53,3 +53,31 @@ export async function convertAudioToOtherAudioType(
 	console.log("convert_Audio to_other_format output: " + ret);
 	return ret;
 }
+
+export async function AudioSilentPartial(
+	input_file_path: string,
+	output_file_path: string,
+	extra: string
+) {
+	const ret = await fetchPost(REQ_PATHS.SILENT_PARTIAL_AUDIO, {
+		input: input_file_path,
+		output: output_file_path,
+		extra,
+	});
+	console.log("AudioSilentPartial: " + ret);
+	return ret;
+}
+
+export async function cropAudio(
+	input_file_path: string,
+	output_file_path: string,
+	extra: string
+) {
+	const ret = await fetchPost(REQ_PATHS.CROP_AUDIO, {
+		input: input_file_path,
+		output: output_file_path,
+		extra,
+	});
+	console.log("AudioSilentPartial: " + ret);
+	return ret;
+}

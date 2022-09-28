@@ -77,11 +77,12 @@ export default function VideoTransform() {
 			message.info("您还没有设置输出文件夹！");
 			return;
 		}
+		const targetFormat = fileInfo.targetFormat?.toLocaleLowerCase();
 		if (singleMode) setSpinning(true);
 		const output_file_path = `${outputDir}\\${filenameWithSuffix(
 			fileInfo.filePath,
 			false
-		)}.${fileInfo.targetFormat?.toLocaleLowerCase()}`;
+		)}.${targetFormat}`;
 		const scaleStr = convertResolutionToScale(fileInfo.resolution);
 		console.log("output_file_path:", output_file_path);
 		await convertVideoToOtherVideoType(
@@ -89,6 +90,7 @@ export default function VideoTransform() {
 			output_file_path,
 			scaleStr
 		);
+
 		const arr = filesInfo.slice();
 		for (let item of arr) {
 			if (item.filePath === fileInfo.filePath) {

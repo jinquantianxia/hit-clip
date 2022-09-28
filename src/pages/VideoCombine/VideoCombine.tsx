@@ -54,7 +54,7 @@ export default function VideoCombine() {
 		}
 		setSpinning(true);
 		const input_paths = videoList.map((video) => video.localPath).join(",");
-		const output_path = `${outputDir}${targetName}.mp4`;
+		const output_path = `${outputDir}\\${targetName}.mp4`;
 		console.log("input_paths:", input_paths, "output_path:", output_path);
 		await combineVideos(input_paths, output_path, "");
 		setSpinning(false);

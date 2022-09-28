@@ -15,7 +15,7 @@ export default function MaterialSquare() {
 	const navigate = useNavigate();
 	const [current, setCurrent] = useState("audio");
 	useEffect(() => {
-		navigate(routers[2].children![0].path);
+		navigate(routers[1].children![0].path);
 	}, []);
 	const onClick: MenuProps["onClick"] = (e) => {
 		console.log("click ", e);
@@ -43,7 +43,7 @@ export default function MaterialSquare() {
 			/>
 			<div className={styles.content}>
 				<Routes>
-					{routers[2].children!.map((router) => {
+					{routers[1].children!.map((router) => {
 						return (
 							<Route
 								key={router.path}

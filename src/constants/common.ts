@@ -6,6 +6,7 @@ export const videoTypeArray = [
 	"MOV",
 	"VOB",
 	"WEBM",
+	// "MKV",
 ];
 
 export const audioTypeArray = [
@@ -17,6 +18,8 @@ export const audioTypeArray = [
 	"AAC",
 	"AC3",
 ];
+
+export const subtitleTypeArray = ["srt"];
 
 export const videoSpeedArray = [
 	"0.5x",

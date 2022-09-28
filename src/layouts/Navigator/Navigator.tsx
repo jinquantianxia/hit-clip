@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-	AppstoreOutlined,
-	CalendarOutlined,
-	LinkOutlined,
-	MailOutlined,
-	SettingOutlined,
-} from "@ant-design/icons";
+import { VideoCameraOutlined, AudioOutlined } from "@ant-design/icons";
 import styles from "./Navigator.module.less";
 import { useNavigate } from "react-router-dom";
 import { routers } from "@src/routers";
@@ -35,17 +29,17 @@ export default function Navigator() {
 		getItem(
 			"视频处理",
 			"sub1",
-			<MailOutlined />,
-			routers[1]
-				.children!.slice(0, 6)
+			<VideoCameraOutlined />,
+			routers[2]
+				.children!.slice(0, 8)
 				.map((item) => getItem(item.name, item.id, item.icon))
 		),
 		getItem(
 			"音频处理",
 			"sub2",
-			<MailOutlined />,
-			routers[1]
-				.children!.slice(6)
+			<AudioOutlined />,
+			routers[2]
+				.children!.slice(8)
 				.map((item) => getItem(item.name, item.id, item.icon))
 		),
 	];
@@ -53,7 +47,7 @@ export default function Navigator() {
 	const handleRouterChange = (e: any) => {
 		console.log("chosse:", e);
 		const key = Number(e.key);
-		navigate(routers[1].children![key].path);
+		navigate(routers[2].children![key].path);
 	};
 	return (
 		<div className={styles.box}>

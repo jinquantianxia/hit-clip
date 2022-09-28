@@ -6,7 +6,7 @@ import "antd/dist/antd.css";
 import { AliveScope } from "react-activation";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-	// <AliveScope>
-	<App />
-	// </AliveScope>
+	<AliveScope>
+		<App />
+	</AliveScope>
 );
