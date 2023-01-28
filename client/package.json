@@ -1,0 +1,45 @@
+{
+	"name": "yinyu",
+	"private": true,
+	"version": "0.1.0",
+	"type": "module",
+	"description": "a tauri demo with rust + tauri + vite + typescipt + react + less, which includes the high level usage",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"tauri-dev": "tauri dev",
+		"tauri-build": "tauri build"
+	},
+	"dependencies": {
+		"@ant-design/icons": "^4.7.0",
+		"@tauri-apps/api": "^1.0.2",
+		"@types/node": "^18.7.2",
+		"antd": "^4.22.8",
+		"dayjs": "^1.11.5",
+		"prop-types": "^15.8.1",
+		"react": "^18.2.0",
+		"react-activation": "^0.11.2",
+		"react-beautiful-dnd": "^13.1.1",
+		"react-dom": "^18.2.0"
+	},
+	"devDependencies": {
+		"@tauri-apps/cli": "^1.0.5",
+		"@types/react": "^18.0.17",
+		"@types/react-beautiful-dnd": "^13.1.2",
+		"@types/react-dom": "^18.0.6",
+		"@vitejs/plugin-react": "^2.0.1",
+		"less": "^4.1.3",
+		"react-router-dom": "^6.3.0",
+		"typescript": "^4.6.4",
+		"vite": "^3.0.6"
+	},
+	"keywords": [
+		"rust",
+		"tauri",
+		"react",
+		"typescript",
+		"vite",
+		"less"
+	]
+}

@@ -1,0 +1,175 @@
+Balabolka (Command Line Utility for Online Text-To-Speech Using)
+Copyright (c) 2019-2022 Ilya Morozov
+All Rights Reserved
+
+
+*** History ***
+
+2022-07-02     v1.37
+[-] Fixed the using of Naver TTS.
+
+
+2022-06-25     v1.36
+[*] Updated the using of Microsoft Azure.
+
+
+2022-04-16     v1.35
+[+] Small improvements.
+
+
+2022-03-26     v1.34
+[*] Updated the using of Microsoft Azure.
+
+
+2022-01-17     v1.33
+[+] Added the new option to insert pauses between adjacent sentences for Microsoft Azure.
+
+
+2021-11-13     v1.32
+[*] Updated the using of Microsoft Azure.
+
+
+2021-11-24     v1.31
+[-] Fixed the SSML using for Microsoft Azure.
+
+
+2021-10-24     v1.30
+[-] Fixed the SSML using for Microsoft Azure.
+[*] Updated the using of Microsoft Azure: the standard voices are no longer supported.
+
+
+2021-10-07     v1.29
+[+] Added the HTTP request timeout (5 seconds): the application waits when the TCP connection is broken.
+[-] Fixed the using of Microsoft Azure.
+
+
+2021-09-25     v1.28
+[+] Small improvements.
+[*] If online TTS service cannot pronounce the current sentence and returns no audio data, empty data will be replaced by silence.
+
+
+2021-09-11     v1.27
+[+] Added the using of Microsoft Azure.
+[+] Added the option to set a speech rate.
+
+
+2021-09-04     v1.26
+[+] Added the new option for subtitle converting.
+
+
+2021-08-18     v1.25
+[-] Removed the using of SpeechPro TTS.
+
+
+2021-07-26     v1.24
+[-] Fixed the using of Naver TTS.
+
+
+2021-07-10     v1.23
+[-] Fixed the using of IBM Watson TTS.
+
+
+2021-07-03     v1.22
+[-] Fixed the using of Naver TTS.
+[-] Fixed the using of SpeechPro TTS.
+[*] The library HASH_CALC.DLL is not used.
+
+
+2021-06-19     v1.21
+[+] Added the using of IBM Watson TTS.
+[+] Added the using of SpeechPro TTS.
+
+
+2021-06-18     v1.20
+[+] Added the using of Amazon Polly.
+
+
+2021-05-25     v1.19
+[-] Fixed the using of external audio files (audio clips).
+
+
+2021-05-08     v1.18
+[+] Added the output to stdout.
+
+
+2021-05-06     v1.17
+[-] Fixed the subtitle creating.
+
+
+2021-04-08     v1.16
+[+] Added the option to set a volume.
+[+] Added the option to open a file with a list of input filenames.
+[*] The HTTP request methods were updated.
+
+
+2021-03-30     v1.15
+[+] Small improvements.
+
+
+2021-03-25     v1.14
+[+] Added the using of Naver TTS.
+
+
+2021-03-20     v1.13
+[+] Added the options to insert blank lines after sentences and paragraphs in LRC files.
+
+
+2021-02-23     v1.12
+[+] Small improvements.
+[*] The library LAME_ENC.DLL is not used.
+
+
+2021-01-24     v1.11
+[+] Small improvements.
+
+
+2020-12-27     v1.10
+[-] Fixed small bugs.
+
+
+2020-12-10     v1.9
+[-] Fixed the using of Youdao TTS.
+
+
+2020-12-08     v1.8
+[-] Fixed the using of Youdao TTS.
+
+
+2020-12-04     v1.7
+[+] Added the option to ignore URLs in text.
+[+] Added the option to display progress information in a console window.
+
+
+2020-11-16     v1.6
+[-] Fixed the using of Google TTS.
+[*] The command line can contain more than one input text file name.
+
+
+2020-06-29     v1.5
+[+] Added the support of LRC format for subtitle converting.
+
+
+2020-05-30     v1.4
+[+] Added the support of WebVTT format for subtitle converting.
+
+
+2020-03-12     v1.3
+[*] The using of Google TTS was updated.
+
+
+2019-12-29     v1.2
+[+] Small improvements.
+
+
+2019-08-17     v1.1
+[+] Small improvements.
+[*] The utility was renamed (thanks to Valur Heeke for his advice).
+
+
+2019-07-20     v1.0
+[-] The using of Bing TTS was disabled.
+[*] The LAME encoder was updated.
+
+
+2019-06-16     v0.9b
+[+] The console application is available for downloading.
