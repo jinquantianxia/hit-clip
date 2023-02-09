@@ -1,6 +1,6 @@
-# tarui-demo
+# yinyu
 
-尝鲜 taurid 的高级用法的 demo
+很好用的音视频创作工具
 
 ## 技术栈
 
