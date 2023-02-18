@@ -26,16 +26,21 @@ use actix_files::NamedFile;
 use spider::audio::audio_square_search;
 use std::path::PathBuf;
 
-struct AppState {
-    count: Mutex<i32>,
-}
+// struct AppState {
+//     count: Mutex<i32>,
+// }
 
-#[get("/auto_add")]
-async fn auto_add(data: web::Data<AppState>) -> String {
-    let mut count = data.count.lock().unwrap();
-    *count += 1;
-    format!("Count: {}", *count)
-}
+// #[get("/auto_add")]
+// async fn auto_add(data: web::Data<AppState>) -> String {
+//     let mut count = data.count.lock().unwrap();
+//     *count += 1;
+//     format!("Count: {}", *count)
+// }
+
+// #[get("/hello")]
+// async fn hello() -> String {
+//     format!("hello world!")
+// }
 
 #[get("/{filename:.*}")]
 async fn get_local_file(req: HttpRequest) -> Result<NamedFile> {
@@ -49,11 +54,12 @@ async fn main() -> std::io::Result<()> {
         let cors = Cors::permissive();
         App::new()
             .wrap(cors)
-            .app_data(web::Data::new(AppState {
-                count: Mutex::new(0),
-            }))
+            // .app_data(web::Data::new(AppState {
+            //     count: Mutex::new(0),
+            // }))
+            // .service(hello)
+            // .service(auto_add)
             .service(get_local_file)
-            .service(auto_add)
             .service(audio_square_search)
             .service(query_video_info)
             .service(convert_video_to_other_format)
@@ -72,7 +78,7 @@ async fn main() -> std::io::Result<()> {
             .service(convert_txt_to_audio)
             .service(convert_txt_to_audio)
     })
-    .bind(("127.0.0.1", 8088))?
+    .bind(("127.0.0.1", 8099))?
     .run()
     .await
 }
