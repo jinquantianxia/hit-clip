@@ -7,5 +7,10 @@
 
 采用的 C/S 架构，由桌面端和本地 Service 端构成。
 
-桌面端：Tauri + React + Rust + Typescipt + Less + Vite
-Service 端：Actix-web + Rust
+### 桌面端
+
+Tauri + React + Rust + Typescipt + Less + Vite
+
+### Service 端
+
+Actix-web + Rust
