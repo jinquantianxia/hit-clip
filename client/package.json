@@ -1,9 +1,9 @@
 {
-	"name": "yinyu",
+	"name": "hit-clip",
 	"private": true,
-	"version": "0.1.0",
+	"version": "0.0.1",
 	"type": "module",
-	"description": "a tauri demo with rust + tauri + vite + typescipt + react + less, which includes the high level usage",
+	"description": "",
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
