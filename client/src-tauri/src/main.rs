@@ -44,11 +44,11 @@ fn main() {
             },
             _ => {}
         })
-        .setup(|app| {
-            let window = app.get_window("main").unwrap();
-            window.open_devtools();
-            Ok(())
-        })
+        // .setup(|app| {
+        //     let window = app.get_window("main").unwrap();
+        //     window.open_devtools();
+        //     Ok(())
+        // })
         .invoke_handler(tauri::generate_handler![show_main_window, show_explorer])
         .build(tauri::generate_context!())
         .expect("Error building app")

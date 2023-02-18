@@ -7,7 +7,7 @@
 		"distDir": "../dist"
 	},
 	"package": {
-		"productName": "yinyu",
+		"productName": "hit-clip",
 		"version": "0.0.1"
 	},
 	"tauri": {
