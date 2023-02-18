@@ -85,10 +85,18 @@
 				"label": "main",
 				"fullscreen": false,
 				"height": 720,
+				"width": 1080,
 				"resizable": false,
 				"title": "",
 				"decorations": false,
-				"width": 1080
+				"visible": false
+			},
+			{
+				"height": 720,
+				"width": 1080,
+				"decorations": false,
+				"url": "splashscreen.html",
+				"label": "splashscreen"
 			}
 		]
 	}
