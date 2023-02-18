@@ -27,3 +27,5 @@ dist-ssr
 *.mp3
 *.srt
 src-tauri/local_service/*
+src-tauri/target/*
+*.mjs
