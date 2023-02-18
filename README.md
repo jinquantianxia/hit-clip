@@ -9,21 +9,3 @@
 
 桌面端：Tauri + React + Rust + Typescipt + Less + Vite
 Service 端：Actix-web + Rust
-
-## 浏览器调试
-
-```sh
-yarn dev
-```
-
-## tauri 桌面调试
-
-```sh
-yarn tauri-dev
-```
-
-## 发布
-
-```sh
-yarn tauri-build
-```
