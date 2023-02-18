@@ -58,7 +58,7 @@ export default function ContentDistribution() {
 			/>
 			<div className={styles.main}>
 				<Routes>
-					{routers[3].children!.map((router) => {
+					{routers[4].children!.map((router) => {
 						return (
 							<Route
 								key={router.path}

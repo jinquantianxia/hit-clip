@@ -5,7 +5,7 @@ import VideoToGIF from "@src/pages/VideoToGIF/VideoToGIF";
 import AudioExtract from "@src/pages/AudioExtract/AudioExtract";
 import VideoMute from "@src/pages/VideoMute/VideoMute";
 
-interface Route {
+export interface Route {
 	id?: number;
 	path: string;
 	name: string;
@@ -13,6 +13,7 @@ interface Route {
 	icon?: JSX.Element;
 	choosed?: boolean;
 	children?: Route[];
+	active?: boolean;
 }
 import {
 	ScissorOutlined,
@@ -59,6 +60,7 @@ export const routers: Route[] = [
 				component: <AudioMaterialSquare />,
 			},
 		],
+		active: false,
 	},
 	{
 		path: "/video_audio/*",
@@ -167,12 +169,14 @@ export const routers: Route[] = [
 			// 	choosed: false,
 			// },
 		],
+		active: true,
 	},
-	// {
-	// 	path: "/synthesis_audio",
-	// 	name: "语音合成",
-	// 	component: <SynthesisAudio />,
-	// },
+	{
+		path: "/synthesis_audio",
+		name: "语音合成",
+		component: <SynthesisAudio />,
+		active: false,
+	},
 
 	{
 		path: "/content_distribute/*",
@@ -195,5 +199,6 @@ export const routers: Route[] = [
 				component: <ContentDistributionKS />,
 			},
 		],
+		active: true,
 	},
 ];

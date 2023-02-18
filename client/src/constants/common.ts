@@ -1,4 +1,4 @@
-export const LOCAL_SERIVCE_BASE_URL = `http://localhost:8088`;
+export const LOCAL_SERIVCE_BASE_URL = `http://localhost:8099`;
 
 export const videoTypeArray = [
 	"MP4",

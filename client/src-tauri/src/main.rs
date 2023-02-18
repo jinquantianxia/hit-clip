@@ -12,22 +12,11 @@ use tauri::{
 
 mod commands;
 
-// use commands::audio::{convert_audio_to_other_format, query_audio_info};
-// use commands::video::{
-//     convert_video_to_audio, convert_video_to_other_format, query_video_info,
-//     remove_audio_from_video,
-// };
 use commands::common::show_explorer;
 use commands::window::show_main_window;
 
 #[derive(Default)]
 struct Backend(Option<CommandChild>);
-
-#[command]
-fn hello_test(word: String) -> String {
-    // dump_av_info("D:/test/rustProjects/tarui-demo/test.mp4");
-    format!("Hello, {}", word)
-}
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
@@ -57,13 +46,7 @@ fn main() {
         })
         .setup(|app| {
             let window = app.get_window("main").unwrap();
-            // window.open_devtools();
-            app.listen_global("backend", |event| {
-                println!(
-                    "get backend messgae from fronrend {}",
-                    event.payload().unwrap()
-                );
-            });
+            window.open_devtools();
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![show_main_window, show_explorer])

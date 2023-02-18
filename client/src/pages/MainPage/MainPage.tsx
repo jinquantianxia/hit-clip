@@ -1,15 +1,18 @@
 import React from "react";
 import styles from "./MainPage.module.less";
 import MainHeader from "./MainPage.module.less";
-import { Route, Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import KeepAlive from "react-activation";
 import { routers } from "@src/routers";
+import { Route } from "@src/routers";
 
 export default function MainPage() {
 	const navigate = useNavigate();
 	const handleClickMenu = (path: string) => {
 		navigate(path);
+	};
+	const handleMenuClick = (route: Route) => {
+		if (!route.active) return;
+		handleClickMenu(route.path);
 	};
 	return (
 		<div className={styles.box}>
@@ -18,7 +21,10 @@ export default function MainPage() {
 					<div
 						key={route.path}
 						className={styles.itemBox}
-						onClick={() => handleClickMenu(route.path)}
+						onClick={() => handleMenuClick(route)}
+						style={{
+							backgroundColor: !route.active ? "grey" : "rgb(4, 162, 109)",
+						}}
 					>
 						{route.name}
 					</div>
